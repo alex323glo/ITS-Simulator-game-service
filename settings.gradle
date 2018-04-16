@@ -1,1 +1,3 @@
 rootProject.name = 'ITS-Simulator-game-service'
+include 'RESTful-web-service'
+
