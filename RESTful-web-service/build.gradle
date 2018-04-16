@@ -4,6 +4,17 @@ version '0.1'
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+sourceSets {
+    main {
+        output.resourcesDir = "build/classes/main"
+    }
+}
 
 repositories {
     mavenCentral()
