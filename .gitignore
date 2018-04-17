@@ -24,6 +24,9 @@ hs_err_pid*
 # local configurations of dev tools
 **/.gradle
 **/.idea
+**/.settings
+.project
+.classpath
 
 # output directories
 **/build
