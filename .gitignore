@@ -31,3 +31,6 @@ hs_err_pid*
 # output directories
 **/build
 **/out
+
+# test in-memory databases' folder
+databases
