@@ -53,13 +53,19 @@
                         </li>
 
                         <li class="nav-item" v-if="!isAuthenticated">
+                            <!--
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AuthorizationModal">Log in</button>
+                            -->
+                            <a class="btn btn-primary" href="/login">Log in</a>
                         </li>
                         <li class="nav-item" v-if="!isAuthenticated">
                             <div style="width: 10px;"></div>
                         </li>
                         <li class="nav-item" v-if="!isAuthenticated">
+                            <!--
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#RegistrationModal">Sign up</button>
+                            -->
+                            <a class="btn btn-success" href="/register">Sign up</a>
                         </li>
 
                         <li class="nav-item" v-if="isAuthenticated">
@@ -160,12 +166,12 @@
                             <div class="modal-body">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="login-email" type="text" class="form-control" placeholder="Email" v-model="loginForm.email">
+                                    <input id="login-email" type="text" class="form-control" name="username" placeholder="Email" v-model="loginForm.email">
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input id="login-password" type="password" class="form-control" placeholder="Password" v-model="loginForm.password">
+                                    <input id="login-password" type="password" class="form-control" name="password" placeholder="Password" v-model="loginForm.password">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -280,9 +286,10 @@
                         alert('Wrong email or password was entered!');
                         return;
                     }
-                    this.$http.post('/login', {
+                    this.$http.post('/login', null, {
                         username: this.loginForm.email,
-                        password: this.loginForm.password
+                        password: this.loginForm.password,
+                        submit: 'Login'
                     }).then(
                         function(response) {
                             alert('Login was successful!');

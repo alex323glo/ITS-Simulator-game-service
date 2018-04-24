@@ -8,16 +8,20 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Configuration
+ * Main Web MVC resources' configuration class
+ * (customizes ResourceHandlers of Spring MVC module).
+ *
+ * @author Alexey_O
+ * @version 0.1
  */
 @Configuration
 @EnableWebMvc
-public class CustomWebMvcResourcesConfig implements WebMvcConfigurer {
+public class WebMvcResourcesHandlerConfiguration implements WebMvcConfigurer {
 
     private final Environment environment;
 
     @Autowired
-    public CustomWebMvcResourcesConfig(Environment environment) {
+    public WebMvcResourcesHandlerConfiguration(Environment environment) {
         this.environment = environment;
     }
 

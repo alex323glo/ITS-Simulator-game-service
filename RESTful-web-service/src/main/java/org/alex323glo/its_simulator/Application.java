@@ -4,8 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Created by alex323glo on 17.04.18.
- * TODO complete JavaDoc
+ * Application's entry point
+ * (with use of instruments from Spring Boot module).
+ *
+ * @author Alexey_O
+ * @version 0.1
  */
 @SpringBootApplication
 public class Application {

@@ -7,25 +7,27 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
 /**
- * Created by alex323glo on 17.04.18.
+ * Main REST Controller.
+ *
+ * @author Alexey_O
+ * @version 0.1
  */
 @RestController
-public class StaticResourceController {
+public class MainController {
 
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(StaticResourceController.class);
+            LoggerFactory.getLogger(MainController.class);
 
     private final Environment environment;
 
     @Autowired
-    public StaticResourceController(Environment environment) {
+    public MainController(Environment environment) {
         this.environment = environment;
     }
 
