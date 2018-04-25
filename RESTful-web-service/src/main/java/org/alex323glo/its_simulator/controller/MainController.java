@@ -44,7 +44,7 @@ public class MainController {
             LOGGER.warn("Non-authorized User tries to get authorized principal (username)!");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            LOGGER.info("Successfully served '/get-authenticated-username' (for user '" +
+            LOGGER.info("Successfully served '/get-authenticated-username' endpoint (for user '" +
                     principal.getName() + "').");
 
             return new ResponseEntity<>(principal.getName(), HttpStatus.OK);
