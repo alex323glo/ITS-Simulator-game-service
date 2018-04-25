@@ -28,7 +28,7 @@ public class SpaceShip {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_game_profile_id")
     private UserGameProfile userGameProfile;
 
@@ -44,9 +44,9 @@ public class SpaceShip {
     @Enumerated(EnumType.STRING)
     private SpaceShipStatus spaceShipStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "current_contract_id")
-    private Contract currentContract;
+    private Mission currentMission;
 
     // TODO complete...
 

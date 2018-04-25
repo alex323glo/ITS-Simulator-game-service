@@ -1,14 +1,14 @@
 package org.alex323glo.its_simulator.model.game;
 
 /**
- * Contract's status model.
+ * Mission's status model.
  *
  * @author Alexey_O
  * @version 0.1
  *
- * @see Contract
+ * @see Mission
  */
-public enum ContractStatus {
+public enum MissionStatus {
 
     CREATED,
     READY,
@@ -17,7 +17,7 @@ public enum ContractStatus {
     CANCELED;
 
     /**
-     * Returns next (by business logic) state of Contract.
+     * Returns next (by business logic) state of Mission.
      *
      * Possible logical moves' chains:
      *      CREATED -> READY -> PERFORMED -> COMPLETED
@@ -26,7 +26,7 @@ public enum ContractStatus {
      *
      * @return next status in logical chain.
      */
-    public ContractStatus getNextStatus() {
+    public MissionStatus getNextStatus() {
         switch (this) {
             case CREATED:
                 return READY;

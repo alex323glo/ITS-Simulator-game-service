@@ -41,7 +41,7 @@ public class User {
     @JoinColumn(name = "user_extension_id")
     private UserExtension userExtension;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_game_profile_id")
     private UserGameProfile userGameProfile;
 

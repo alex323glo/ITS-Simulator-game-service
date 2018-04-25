@@ -3,8 +3,10 @@ package org.alex323glo.its_simulator.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -23,6 +25,12 @@ public class WebMvcResourcesHandlerConfiguration implements WebMvcConfigurer {
     @Autowired
     public WebMvcResourcesHandlerConfiguration(Environment environment) {
         this.environment = environment;
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/",
+                environment.getProperty("front-part.index-page.url"));
     }
 
     @Override

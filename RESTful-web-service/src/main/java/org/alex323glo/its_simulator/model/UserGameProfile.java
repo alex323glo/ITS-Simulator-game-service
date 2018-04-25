@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.alex323glo.its_simulator.model.game.Contract;
+import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.model.game.SpaceShip;
 
 import javax.persistence.*;
@@ -29,7 +29,8 @@ public class UserGameProfile {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(
@@ -40,7 +41,7 @@ public class UserGameProfile {
     @OneToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private List<Contract> contracts;
+    private List<Mission> missions;
 
     // TODO complete...
 }

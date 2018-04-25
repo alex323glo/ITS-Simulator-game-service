@@ -69,7 +69,13 @@
                         </li>
 
                         <li class="nav-item" v-if="isAuthenticated">
-                            <button type="button" class="btn btn-info">{{username}}</button>
+                            <a href="/" class="btn btn-info">{{username}}</a>
+                        </li>
+                        <li class="nav-item" v-if="isAuthenticated">
+                            <div style="width: 10px;"></div>
+                        </li>
+                        <li class="nav-item" v-if="isAuthenticated">
+                            <a href="/" class="btn btn-danger">log out</a>
                         </li>
                     </ul>
                 </div>
@@ -270,10 +276,11 @@
                     this.$http.get('/get-authenticated-username').then(
                         function success(response) {
                             this.isAuthenticated = (response != null);
-                            this.username = response;
+                            this.username = response.bodyText;
+                            console.log('Welcome.refreshAuthenticatedUsername() : successfully got username');
                         },
                         function error(response) {
-                            //...
+                            console.log('Welcome.refreshAuthenticatedUsername() : can not get username');
                         }
                     );
                 },

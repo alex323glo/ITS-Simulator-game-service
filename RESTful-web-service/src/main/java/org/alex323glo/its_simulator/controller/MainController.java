@@ -1,16 +1,21 @@
 package org.alex323glo.its_simulator.controller;
 
+import org.alex323glo.its_simulator.exception.AppException;
+import org.alex323glo.its_simulator.model.User;
+import org.alex323glo.its_simulator.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.security.Principal;
 
 /**
  * Main REST Controller.
@@ -24,22 +29,47 @@ public class MainController {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MainController.class);
 
-    private final Environment environment;
+    private final UserService userService;
 
     @Autowired
-    public MainController(Environment environment) {
-        this.environment = environment;
+    public MainController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<Void> indexPage() {
-        LOGGER.info("Serving '/' (index page) endpoint...");
-        String indexPageURLString = environment.getProperty("front-part.index-page.url");
-        LOGGER.info("'/' (index page) request will be served with '" + indexPageURLString + "' static resource");
+    @GetMapping("/get-authenticated-username")
+    public ResponseEntity<String> getAuthenticatedUsername(Principal principal) {
+        LOGGER.info("Serving '/get-authenticated-username' endpoint (GET request)...");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(indexPageURLString));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        if (principal == null) {
+            LOGGER.warn("Non-authorized User tries to get authorized principal (username)!");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            LOGGER.info("Successfully served '/get-authenticated-username' (for user '" +
+                    principal.getName() + "').");
+
+            return new ResponseEntity<>(principal.getName(), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> registerNewUser(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("email") String email) {
+        LOGGER.info("Serving '/register' endpoint (POST request)...");
+        try {
+            User registeredUser = userService.registerUser(username, password, email);  // throws AppException !
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(URI.create("/login"));
+            LOGGER.info("Successfully served '/register' endpoint (user {username: '" +
+                    username + "', password: '" +
+                    password + "', email: '" +
+                    email + "'} was registered to system).");
+            return new ResponseEntity<>(httpHeaders, HttpStatus.PERMANENT_REDIRECT);
+        } catch (AppException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

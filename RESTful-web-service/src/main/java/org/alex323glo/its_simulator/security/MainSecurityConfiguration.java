@@ -9,11 +9,19 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Main security configuration class
@@ -30,8 +38,8 @@ public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService() {
         return username -> User.builder()
-                .username("test")
-                .password(passwordEncoder().encode("test"))
+                .username("alex323glo")
+                .password(passwordEncoder().encode("12345678"))
                 .roles("USER")
                 .build();
     }
@@ -41,12 +49,15 @@ public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/private/**").authenticated()
+                    .anyRequest().permitAll()
                     .and()
                 .formLogin()
-                    .successHandler(authenticationSuccessHandler())
-                    .failureHandler(authenticationFailureHandler())
+                    .permitAll()
                     .and()
                 .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/")
+//                    .logoutSuccessHandler(logoutSuccessHandler())
                     .permitAll();
     }
 
@@ -81,4 +92,28 @@ public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected CustomAuthenticationFailureHandler authenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
+
+//    @Bean
+//    protected LogoutSuccessHandler logoutSuccessHandler() {
+////        return (request, response, authentication) -> {
+////            if (authentication.isAuthenticated()) {
+////                try {
+////                    request.logout();
+////                } catch (ServletException e) {
+////                    try {
+////                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
+////                    } catch (IOException e1) {
+////                        e1.printStackTrace();
+////                    }
+////                }
+////            }
+////        };
+//        return (request, response, authentication) -> {
+//            try {
+//
+//            } catch (IOException ioe) {
+//
+//            }
+//        };
+//    }
 }

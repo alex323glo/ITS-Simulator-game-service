@@ -8,31 +8,32 @@ import org.alex323glo.its_simulator.model.UserGameProfile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
- * Contract model.
- * Is a JPA Entity. Represents 'contracts' SQL table.
+ * Mission model.
+ * Is a JPA Entity. Represents 'missions' SQL table.
  *
  * @author Alexey_O
  * @version 0.1
  */
 @Entity
-@Table(name = "contracts")
+@Table(name = "missions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Contract {
+public class Mission {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_gme_profile_id")
     private UserGameProfile userGameProfile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "space_ship_id")
     private SpaceShip spaceShip;
 
@@ -45,6 +46,9 @@ public class Contract {
     private Planet destinationPoint;
 
     @Column(nullable = false)
+    private LocalDateTime registrationTime;
+
+    @Column(nullable = true)
     private LocalDateTime startTime;
 
     @Column(nullable = true)
@@ -53,8 +57,11 @@ public class Contract {
     @Column(precision = 3)
     private Double payload;
 
+    @Column
+    private LocalTime duration;
+
     @Enumerated(EnumType.STRING)
-    private ContractStatus contractStatus;
+    private MissionStatus missionStatus;
 
     // TODO complete...
 }
