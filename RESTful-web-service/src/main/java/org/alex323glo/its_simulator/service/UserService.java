@@ -33,9 +33,32 @@ public interface UserService {
     /**
      * Searches for User record by its username.
      *
+     * WARNING! This method doesn't give guarantees that additional
+     * userExtension and userGameProfile fields will be properly initialized.
+     * If you want to get User object with all fully initialized fields (and without loop references),
+     * please, use findUser() method (referenced below).
+     *
      * @param username unique not-null username.
      * @return needed User, if it was registered to System before, or null, if it wasn't.
      * @throws AppException if System can't search for User in some reasons.
+     *
+     * @see UserService#findUser(String)
+     */
+    User findLightUser(String username) throws AppException;
+
+    /**
+     * Searches for User record by its username.
+     *
+     * WARNING! This method (as result) gives you User object with all
+     * fully initialized fields (and without loop references). If you want to get light-weight
+     * User object (with not initialized userExtension and userGameProfile fields),
+     * please, use findLightUser() method (referenced below).
+     *
+     * @param username unique not-null username.
+     * @return needed User, if it was registered to System before, or null, if it wasn't.
+     * @throws AppException if System can't search for User in some reasons.
+     *
+     * @see UserService#findUser(String)
      */
     User findUser(String username) throws AppException;
 
@@ -55,18 +78,21 @@ public interface UserService {
      * Changes UserExtension of needed User
      * (will simply replace old extension with new one).
      *
-     * @param user target User.
+     * @param username unique not-null username.
      * @param newUserExtension new instance of User extension.
      * @return replaced (old) UserExtension.
      * @throws AppException if System can't change User's Extension in some reasons.
      */
-    UserExtension changeUserExtension(User user, UserExtension newUserExtension) throws AppException;
+    UserExtension changeUserExtension(String username, UserExtension newUserExtension) throws AppException;
 
     /**
-     * TODO finish doc (UserService.findUserExtension())
-     * @param username
-     * @return
-     * @throws AppException
+     * Searches for UserExtension record by User's username.
+     *
+     * @param username unique not-null username.
+     * @return needed UserExtension, if User with such username was registered to System,
+     * or null, if it wasn't.
+     * @throws AppException if System can't find UserExtension in some reasons. Possible reasons: <br>
+     *  - username didn't pass validation via Validator class logic (ValidationException) <br>
      */
     UserExtension findUserExtension(String username) throws AppException;
 

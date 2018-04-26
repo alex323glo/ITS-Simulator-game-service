@@ -20,8 +20,24 @@ import java.security.Principal;
 /**
  * Main REST Controller.
  *
+ * Uses UserService to carry out business logic.
+ *
+ * Serves such endpoints:                           <br>
+ *  1) '/register'                                  <br>
+ *      - method: POST;                             <br>
+ *      - params: username, password, email;        <br>
+ *      - response: REDIRECT (308) to '/login');    <br>
+ *
+ *  2) '/get-authenticated-username' (method: GET)  <br>
+ *      - method: GET;                              <br>
+ *      - params: no;                               <br>
+ *      - response: OK (200) with username as body; <br>
+ *      - must be authenticated!                    <br>
+ *
  * @author Alexey_O
  * @version 0.1
+ *
+ * @see UserService
  */
 @RestController
 public class MainController {
@@ -34,21 +50,6 @@ public class MainController {
     @Autowired
     public MainController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/get-authenticated-username")
-    public ResponseEntity<String> getAuthenticatedUsername(Principal principal) {
-        LOGGER.info("Serving '/get-authenticated-username' endpoint (GET request)...");
-
-        if (principal == null) {
-            LOGGER.warn("Non-authorized User tries to get authorized principal (username)!");
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            LOGGER.info("Successfully served '/get-authenticated-username' endpoint (for user '" +
-                    principal.getName() + "').");
-
-            return new ResponseEntity<>(principal.getName(), HttpStatus.OK);
-        }
     }
 
     @PostMapping("/register")
@@ -69,6 +70,21 @@ public class MainController {
         } catch (AppException e) {
             LOGGER.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-authenticated-username")
+    public ResponseEntity<String> getAuthenticatedUsername(Principal principal) {
+        LOGGER.info("Serving '/get-authenticated-username' endpoint (GET request)...");
+
+        if (principal == null) {
+            LOGGER.warn("Non-authorized User tries to get authorized principal (username)!");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            LOGGER.info("Successfully served '/get-authenticated-username' endpoint (for user '" +
+                    principal.getName() + "').");
+
+            return new ResponseEntity<>(principal.getName(), HttpStatus.OK);
         }
     }
 

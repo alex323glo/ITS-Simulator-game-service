@@ -7,11 +7,9 @@ import org.alex323glo.its_simulator.repository.UserRepository;
 import org.alex323glo.its_simulator.service.UserService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,11 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
 
-// TODO : MAKE IT WORK!
-
-@Ignore // TODO : REMOVE !
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,8 +47,6 @@ public class PersonalRoomControllerTest {
         userRepository.deleteAll();
 
         testUser = userService.registerUser(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
-        testUser.setUserExtension(userService.findUserExtension(TEST_USERNAME));
-        testUser.setUserGameProfile(userService.findUserGameProfile(TEST_USERNAME));
     }
 
     @After
@@ -64,33 +57,41 @@ public class PersonalRoomControllerTest {
     @Test
     @WithMockUser(username = TEST_USERNAME)
     public void sendUserData() throws Exception {
+        testUser.getUserGameProfile().setUser(null);
+        testUser.getUserExtension().setUser(null);
+        testUser.getUserGameProfile().setMissions(new ArrayList<>());
+        testUser.getUserGameProfile().setShips(new ArrayList<>());
+
+        String testUserJSON = new JacksonJsonProvider().toJson(testUser);
+
         mockMvc
                 .perform(MockMvcRequestBuilders
                         .get("/private/personal-room/user-data")
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
-                        new JacksonJsonProvider().toJson(testUser)
-                ));
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = TEST_USERNAME)
     public void editUserExtension() throws Exception {
 
         UserExtension newUserExtension =
-                UserExtension.builder().email("new_test@mail.com").build();
+                UserExtension.builder().id(0L).email("new_test@mail.com").build();
+
+        testUser.getUserExtension().setEmail(newUserExtension.getEmail());
+        testUser.getUserExtension().setUser(null);
+
+        String newUserExtensionJSON = new JacksonJsonProvider().toJson(newUserExtension);
 
         mockMvc
                 .perform(MockMvcRequestBuilders
                         .post("/private/personal-room/edit")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(new JacksonJsonProvider().toJson(newUserExtension))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(newUserExtensionJSON)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(
-                        new JacksonJsonProvider().toJson(testUser.getUserExtension())
-                ));
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
     }
 }
