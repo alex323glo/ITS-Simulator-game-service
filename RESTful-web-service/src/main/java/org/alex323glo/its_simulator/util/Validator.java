@@ -113,35 +113,23 @@ public class Validator {
         return this;
     }
 
-//    public Validator validatePlanet(Planet planet) throws ValidationException {
-//        if (planet == null) {
-//            throw new ValidationException("Planet validation failed (planet is null).");
-//        }
-//        if (planet.getName() == null || planet.getName().length() < 1) {
-//            throw new ValidationException("Planet validation failed (planet.name is null or empty).");
-//        }
-//        if (planet.getPositionX() == null || planet.getPositionX() < 0) {
-//            throw new ValidationException("Planet validation failed (planet.positionX is null or negative).");
-//        }
-//        if (planet.getPositionY() == null || planet.getPositionY() < 0) {
-//            throw new ValidationException("Planet validation failed (planet.positionY is null or negative).");
-//        }
-//        return this;
-//    }
+    public Validator validateSpaceShipLevel(Integer level) throws ValidationException {
+        if (level == null) {
+            throw new ValidationException("SpaceShip level validation failed (level is null).");
+        }
+        if (level < 1) {
+            throw new ValidationException("SpaceShip level validation failed (level is < 1).");
+        }
+        return this;
+    }
 
-//    public Validator validateSpaceShip(SpaceShip spaceShip) throws ValidationException {
-//        if (spaceShip == null) {
-//            throw new ValidationException("SpaceShip validation failed (spaceShip is null).");
-//        }
-//        if (spaceShip.getName() == null || spaceShip.getName().length() < 1) {
-//            throw new ValidationException("SpaceShip validation failed (spaceShip.name is null or empty).");
-//        }
-//        if (spaceShip.getLevel() == null || spaceShip.getLevel() < 1) {
-//            throw new ValidationException("SpaceShip validation failed (spaceShip.level is null or < 1).");
-//        }
-//        if (spaceShip.getMaxCargoCapacity() == null || spaceShip.getMaxCargoCapacity() <= 0) {
-//            throw new ValidationException("SpaceShip validation failed (spaceShip.maxCargoCapacity is null or <= 0).");
-//        }
-//        return this;
-//    }
+    public Validator validateSpaceShipSpeed(Double speed) throws ValidationException {
+        if (speed == null) {
+            throw new ValidationException("SpaceShip speed validation failed (speed is null).");
+        }
+        if (speed <= 0) {
+            throw new ValidationException("SpaceShip speed validation failed (speed is <= 0).");
+        }
+        return this;
+    }
 }

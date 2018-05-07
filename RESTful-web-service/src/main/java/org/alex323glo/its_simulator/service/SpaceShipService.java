@@ -15,6 +15,21 @@ import java.util.List;
 public interface SpaceShipService {
 
     /**
+     * Saves new User's SpaceShip to System.
+     *
+     * @param username unique and valid username of registered User.
+     * @param shipName unique and valid name of new SpaceShip.
+     * @param maxCargoCapacity maximum payload of new SpaceShip.
+     * @param level initial level of new SpaceShip.
+     * @param speed initial speed of new SpaceShip.
+     * @return (not null) saved SpaceShip, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    SpaceShip createSpaceShip(String username, String shipName, Double maxCargoCapacity,
+                              Integer level, Double speed) throws AppException;
+
+    /**
      * Searches for existent User's SpaceShip.
      *
      * @param username unique and valid username of registered User.
@@ -30,6 +45,16 @@ public interface SpaceShipService {
      *
      * @param username unique and valid username of registered User.
      * @return (not null) List of User's SpaceShip's, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    List<SpaceShip> findAllShips(String username) throws AppException;
+
+    /**
+     * Lists all User's existent SpaceShips with FREE status.
+     *
+     * @param username unique and valid username of registered User.
+     * @return (not null) List of User's FREE SpaceShip's, if operation was successful.
      * @throws AppException if System can't carry out this operation in some reasons
      * (see more in method's realisation).
      */

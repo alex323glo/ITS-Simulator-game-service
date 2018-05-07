@@ -2,6 +2,7 @@ package org.alex323glo.its_simulator.service;
 
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.exception.ValidationException;
+import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.SpaceShip;
 import org.alex323glo.its_simulator.model.game.SpaceShipStatus;
 import org.alex323glo.its_simulator.repository.SpaceShipRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,11 +31,70 @@ public class SpaceShipServiceImpl implements SpaceShipService {
 
     private final Validator validator;
     private final SpaceShipRepository spaceShipRepository;
+    private final UserService userService;
 
     @Autowired
-    public SpaceShipServiceImpl(Validator validator, SpaceShipRepository spaceShipRepository) {
+    public SpaceShipServiceImpl(Validator validator, SpaceShipRepository spaceShipRepository, UserService userService) {
         this.validator = validator;
         this.spaceShipRepository = spaceShipRepository;
+        this.userService = userService;
+    }
+
+    /**
+     * Saves new User's SpaceShip to System.
+     *
+     * @param username         unique and valid username of registered User.
+     * @param shipName         unique and valid name of new SpaceShip.
+     * @param maxCargoCapacity maximum payload of new SpaceShip.
+     * @param level            initial level of new SpaceShip.
+     * @param speed            initial speed of new SpaceShip.
+     * @return (not null) saved SpaceShip, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public SpaceShip createSpaceShip(String username, String shipName, Double maxCargoCapacity,
+                                     Integer level, Double speed) throws AppException {
+        LOGGER.info("Trying to create new SpaceShip...");
+
+        try {
+            validator.validateUsername(username).validateSpaceShipName(shipName).validatePayload(maxCargoCapacity)
+                    .validateSpaceShipLevel(level).validateSpaceShipSpeed(speed);
+        } catch (ValidationException e) {
+            AppException exception = new AppException(
+                    "Can't create new SpaceShip. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        UserGameProfile userGameProfile = userService.findUserGameProfile(username);
+        if (userGameProfile == null) {
+            AppException exception = new AppException(
+                    "Attempt to edit personal data (create new SpaceShip) of non-existent User.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(shipName, username) != null) {
+            AppException exception = new AppException("Attempt to save new SpaceShip with duplicate name.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        SpaceShip spaceShip = SpaceShip.builder()
+                .userGameProfile(userGameProfile)
+                .name(shipName)
+                .maxCargoCapacity(maxCargoCapacity)
+                .creationTime(LocalDateTime.now())
+                .spaceShipStatus(SpaceShipStatus.FREE)
+                .level(level)
+                .speed(speed)
+                .build();
+
+        SpaceShip savedSpaceShip = spaceShipRepository.save(spaceShip);
+
+        LOGGER.info("Successfully created new SpaceShip.");
+        return savedSpaceShip;
     }
 
     /**
@@ -59,7 +120,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
             throw exception;
         }
 
-        SpaceShip spaceShip = spaceShipRepository.findByName(shipName);
+        SpaceShip spaceShip = spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(shipName, username);
 
         if (spaceShip == null) {
             LOGGER.warn("No ship with such name was saved to Data Base.");
@@ -83,6 +144,33 @@ public class SpaceShipServiceImpl implements SpaceShipService {
      *
      * @param username unique and valid username of registered User.
      * @return (not null) List of User's SpaceShip's, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public List<SpaceShip> findAllShips(String username) throws AppException {
+        LOGGER.info("Trying to list all SpaceShips by User's username...");
+
+        try {
+            validator.validateUsername(username);
+        } catch (ValidationException e) {
+            AppException exception =
+                    new AppException("Can't list all SpaceShips by User's username. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        List<SpaceShip> spaceShipList = spaceShipRepository.findAllByUserGameProfile_User_Username(username);
+
+        LOGGER.info("Successfully listed all SpaceShips by User's username.");
+        return spaceShipList;
+    }
+
+    /**
+     * Lists all User's existent SpaceShips with FREE status.
+     *
+     * @param username unique and valid username of registered User.
+     * @return (not null) List of User's FREE SpaceShip's, if operation was successful.
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
