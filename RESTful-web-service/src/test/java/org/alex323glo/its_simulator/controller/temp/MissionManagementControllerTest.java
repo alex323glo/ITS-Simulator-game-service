@@ -1,9 +1,16 @@
-package org.alex323glo.its_simulator.controller;
+package org.alex323glo.its_simulator.controller.temp;
 
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.model.User;
-import org.alex323glo.its_simulator.model.UserExtension;
+import org.alex323glo.its_simulator.model.UserGameProfile;
+import org.alex323glo.its_simulator.model.game.Mission;
+import org.alex323glo.its_simulator.model.game.Planet;
+import org.alex323glo.its_simulator.model.game.SpaceShip;
+import org.alex323glo.its_simulator.repository.MissionRepository;
 import org.alex323glo.its_simulator.repository.UserRepository;
+import org.alex323glo.its_simulator.service.MissionService;
+import org.alex323glo.its_simulator.service.PlanetService;
+import org.alex323glo.its_simulator.service.SpaceShipService;
 import org.alex323glo.its_simulator.service.UserService;
 import org.junit.After;
 import org.junit.Before;
@@ -20,32 +27,46 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PersonalRoomControllerTest {
-
+public class MissionManagementControllerTest {
+/*
     private static final String TEST_USERNAME = "test";
     private static final String TEST_PASSWORD = "12345678";
     private static final String TEST_EMAIL = "test@mail.com";
+
+    private static final String TEST_SHIP_1_NAME = "Enterprise";
+    private static final Double TEST_SHIP_1_MAX_CARGO_CAPACITY = 100.00;
+
+    private static final String TEST_SHIP_2_NAME = "Standard";
+    private static final Double TEST_SHIP_2_MAX_CARGO_CAPACITY = 150.50;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MissionService missionService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
+    private SpaceShipService spaceShipService;
+
+    @Autowired
+    private PlanetService planetService;
 
     private User testUser;
 
     @Before
     public void setUp() throws Exception {
         userRepository.deleteAll();
-
         testUser = userService.registerUser(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
     }
 
@@ -56,42 +77,28 @@ public class PersonalRoomControllerTest {
 
     @Test
     @WithMockUser(username = TEST_USERNAME)
-    public void sendUserData() throws Exception {
-        testUser.getUserGameProfile().setUser(null);
-        testUser.getUserExtension().setUser(null);
-        testUser.getUserGameProfile().setMissions(new ArrayList<>());
-        testUser.getUserGameProfile().setShips(new ArrayList<>());
+    public void getMissionsList() throws Exception {
 
-        String testUserJSON = new JacksonJsonProvider().toJson(testUser);
+        UserGameProfile gameProfile = userService.findUserGameProfile(TEST_USERNAME);
 
-        mockMvc
-                .perform(MockMvcRequestBuilders
-                        .get("/private/personal-room/user-data")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
-    }
+        SpaceShip enterpriseShip =
+                spaceShipService.createShip(gameProfile, TEST_SHIP_1_NAME, TEST_SHIP_1_MAX_CARGO_CAPACITY);
 
-    @Test
-    @WithMockUser(username = TEST_USERNAME)
-    public void editUserExtension() throws Exception {
+        SpaceShip standardShip =
+                spaceShipService.createShip(gameProfile, TEST_SHIP_2_NAME, TEST_SHIP_2_MAX_CARGO_CAPACITY);
 
-        UserExtension newUserExtension =
-                UserExtension.builder().id(0L).email("new_test@mail.com").build();
+        Planet planet1 = planetService.createNewPlanet("P1");
+        Planet planet2 = planetService.createNewPlanet("P2");
 
-        testUser.getUserExtension().setEmail(newUserExtension.getEmail());
-        testUser.getUserExtension().setUser(null);
-
-        String newUserExtensionJSON = new JacksonJsonProvider().toJson(newUserExtension);
+        Mission testMission1 = missionService.createMission(gameProfile, enterpriseShip, planet1, planet2);
+        Mission testMission2 = missionService.createMission(gameProfile, standardShip, planet2, planet1);
 
         mockMvc
                 .perform(MockMvcRequestBuilders
-                        .post("/private/personal-room/edit")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(newUserExtensionJSON)
+                        .get("/private/mission-management/missions")
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-    }
+    }*/
 }

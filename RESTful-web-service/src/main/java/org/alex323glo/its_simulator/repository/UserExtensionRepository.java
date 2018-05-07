@@ -4,13 +4,11 @@ import org.alex323glo.its_simulator.model.UserExtension;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * TODO add doc
- */
 @Repository
 public interface UserExtensionRepository extends JpaRepository<UserExtension, Long> {
 
-    UserExtension findUserExtensionByEmail(String email);
-    UserExtension findUserExtensionByUser_Username(String username);
+    UserExtension findByEmail(String email);
+
+    UserExtension findByUser_Username(String username);
 
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.alex323glo.its_simulator.model.UserGameProfile;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,20 +31,21 @@ public class Mission {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_gme_profile_id")
+    @ManyToOne
     private UserGameProfile userGameProfile;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "space_ship_id")
+    @OneToOne(
+            fetch = FetchType.EAGER,
+//            mappedBy = "currentMission",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private SpaceShip spaceShip;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "starting_point_id")
-    private Planet startingPoint;
+    @ManyToOne
+    private Planet startPoint;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "destination_point_id")
+    @ManyToOne
     private Planet destinationPoint;
 
     @Column(nullable = false)
@@ -57,8 +60,8 @@ public class Mission {
     @Column(precision = 3)
     private Double payload;
 
-    @Column
-    private LocalTime duration;
+    @Column(nullable = false)
+    private Long duration;
 
     @Enumerated(EnumType.STRING)
     private MissionStatus missionStatus;

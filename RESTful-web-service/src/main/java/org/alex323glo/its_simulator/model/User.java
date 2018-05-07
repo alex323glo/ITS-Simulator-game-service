@@ -37,15 +37,23 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_extension_id")
+    @OneToOne(
+            optional = false,
+            fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private UserExtension userExtension;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_game_profile_id")
+    @OneToOne(
+            optional = false,
+            fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private UserGameProfile userGameProfile;
-
-
 
     /**
      * Generates UserDetails object for Security purposes.

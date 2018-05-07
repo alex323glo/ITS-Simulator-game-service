@@ -29,18 +29,24 @@ public class UserGameProfile {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @OneToOne
+    @MapsId
     private User user;
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            mappedBy = "userGameProfile",
+            orphanRemoval = true
+    )
     private List<SpaceShip> ships;
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            mappedBy = "userGameProfile",
+            orphanRemoval = true
+    )
     private List<Mission> missions;
 
     // TODO complete...

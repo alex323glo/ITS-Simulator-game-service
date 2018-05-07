@@ -28,7 +28,7 @@ import java.security.Principal;
  *      - params: username, password, email;        <br>
  *      - response: REDIRECT (308) to '/login');    <br>
  *
- *  2) '/get-authenticated-username' (method: GET)  <br>
+ *  2) '/get-authenticated-username'                <br>
  *      - method: GET;                              <br>
  *      - params: no;                               <br>
  *      - response: OK (200) with username as body; <br>
@@ -59,7 +59,7 @@ public class MainController {
             @RequestParam("email") String email) {
         LOGGER.info("Serving '/register' endpoint (POST request)...");
         try {
-            User registeredUser = userService.registerUser(username, password, email);  // throws AppException !
+            User registeredUser = userService.registerUser(username, password, email);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create("/login"));
             LOGGER.info("Successfully served '/register' endpoint (user {username: '" +

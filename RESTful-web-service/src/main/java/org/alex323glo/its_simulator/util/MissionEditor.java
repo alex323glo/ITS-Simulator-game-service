@@ -27,12 +27,12 @@ public class MissionEditor {
     }
 
     MissionEditor startingPoint(Planet startingPoint) {
-        tempMission.setStartingPoint(startingPoint);
+        tempMission.setStartPoint(startingPoint);
         return this;
     }
 
     MissionEditor destinationPoint(Planet destinationPoint) {
-        tempMission.setStartingPoint(destinationPoint);
+        tempMission.setStartPoint(destinationPoint);
         return this;
     }
 
@@ -41,7 +41,7 @@ public class MissionEditor {
         return this;
     }
 
-    MissionEditor duration(LocalTime duration) {
+    MissionEditor duration(Long duration) {
         tempMission.setDuration(duration);
         return this;
     }
@@ -50,8 +50,8 @@ public class MissionEditor {
         if (tempMission.getSpaceShip() != null) {
             mission.setSpaceShip(tempMission.getSpaceShip());
         }
-        if (tempMission.getStartingPoint() != null) {
-            mission.setStartingPoint(tempMission.getStartingPoint());
+        if (tempMission.getStartPoint() != null) {
+            mission.setStartPoint(tempMission.getStartPoint());
         }
         if (tempMission.getDestinationPoint() != null) {
             mission.setDestinationPoint(tempMission.getDestinationPoint());

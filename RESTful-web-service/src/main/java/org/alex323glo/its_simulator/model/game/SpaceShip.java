@@ -28,8 +28,7 @@ public class SpaceShip {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_game_profile_id")
+    @ManyToOne
     private UserGameProfile userGameProfile;
 
     @Column(nullable = false, unique = true)
@@ -44,10 +43,17 @@ public class SpaceShip {
     @Enumerated(EnumType.STRING)
     private SpaceShipStatus spaceShipStatus;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "current_contract_id")
-    private Mission currentMission;
+//    @OneToOne
+//    private Mission currentMission;
 
-    // TODO complete...
+
+    // Additional
+
+    @Column(nullable = false)
+    private Integer level;
+
+    @Column(nullable = false)
+    private Double speed;
+
 
 }

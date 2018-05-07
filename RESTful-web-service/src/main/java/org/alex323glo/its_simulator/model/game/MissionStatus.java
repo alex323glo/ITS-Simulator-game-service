@@ -11,8 +11,7 @@ package org.alex323glo.its_simulator.model.game;
 public enum MissionStatus {
 
     CREATED,
-    READY,
-    PERFORMED,
+    STARTED,
     COMPLETED,
     CANCELED;
 
@@ -20,7 +19,7 @@ public enum MissionStatus {
      * Returns next (by business logic) state of Mission.
      *
      * Possible logical moves' chains:
-     *      CREATED -> READY -> PERFORMED -> COMPLETED
+     *      CREATED  -> STARTED -> COMPLETED
      *      COMPLETED -> COMPLETED
      *      CANCELED -> CANCELED
      *
@@ -29,10 +28,8 @@ public enum MissionStatus {
     public MissionStatus getNextStatus() {
         switch (this) {
             case CREATED:
-                return READY;
-            case READY:
-                return PERFORMED;
-            case PERFORMED:
+                return STARTED;
+            case STARTED:
                 return COMPLETED;
 
             default:

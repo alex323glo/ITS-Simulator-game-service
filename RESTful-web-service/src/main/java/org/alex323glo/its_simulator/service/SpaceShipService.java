@@ -1,24 +1,37 @@
 package org.alex323glo.its_simulator.service;
 
 import org.alex323glo.its_simulator.exception.AppException;
-import org.alex323glo.its_simulator.model.UserGameProfile;
-import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.model.game.SpaceShip;
 
 import java.util.List;
 
+/**
+ * General Space Ship Service, which covers business logic
+ * of search and management of User's SpaceShips.
+ *
+ * @author Alexey_O
+ * @version 0.1
+ */
 public interface SpaceShipService {
 
-    SpaceShip createShip(UserGameProfile gameProfile, String shipName, Double maxCargoCapacity)
-            throws AppException;
-    SpaceShip findShip(String shipName) throws AppException;
-    Mission deleteShipAndCancelCurrentMission(SpaceShip spaceShip) throws AppException;
+    /**
+     * Searches for existent User's SpaceShip.
+     *
+     * @param username unique and valid username of registered User.
+     * @param shipName unique and valid name of existent SpaceShip.
+     * @return needed SpaceShip, if it was created before, or null, if it wasn't.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    SpaceShip findSpaceShip(String username, String shipName) throws AppException;
 
-    Mission attachMission(SpaceShip spaceShip, Mission mission) throws AppException;
-    Mission detachMission(SpaceShip spaceShip) throws AppException;
-
-    List<SpaceShip> findAllShips(UserGameProfile userGameProfile) throws AppException;
-    List<SpaceShip> findAllBusyShips(UserGameProfile userGameProfile) throws AppException;
-    List<SpaceShip> findAllFreeShips(UserGameProfile userGameProfile) throws AppException;
-
+    /**
+     * Lists all User's existent SpaceShips.
+     *
+     * @param username unique and valid username of registered User.
+     * @return (not null) List of User's SpaceShip's, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    List<SpaceShip> findAllFreeShips(String username) throws AppException;
 }

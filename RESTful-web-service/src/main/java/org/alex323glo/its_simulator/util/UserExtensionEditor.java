@@ -1,5 +1,6 @@
 package org.alex323glo.its_simulator.util;
 
+import org.alex323glo.its_simulator.exception.ValidationException;
 import org.alex323glo.its_simulator.model.UserExtension;
 
 /**
@@ -12,24 +13,31 @@ import org.alex323glo.its_simulator.model.UserExtension;
 public class UserExtensionEditor {
 
     private UserExtension tempUserExtension;
+    private Validator validator;
 
-    public UserExtensionEditor() {
+    public UserExtensionEditor(Validator validator) {
+        this.validator = validator;
         tempUserExtension = new UserExtension();
     }
 
     public UserExtensionEditor email(String email) {
-        tempUserExtension.setEmail(email);
+        try {
+            validator.validateEmail(email);
+            tempUserExtension.setEmail(email);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 
-    // ...
+    // TODO add other UserExtension's properties ...
 
     public UserExtension merge(UserExtension userExtension) {
         if (tempUserExtension.getEmail() != null) {
             userExtension.setEmail(tempUserExtension.getEmail());
         }
 
-        // ...
+        // TODO add other UserExtension's properties ...
 
         return userExtension;
     }

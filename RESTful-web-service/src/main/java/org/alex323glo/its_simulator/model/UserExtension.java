@@ -27,15 +27,14 @@ public class UserExtension {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @Column
+    private String email;
+
+    @OneToOne
+    @MapsId
     private User user;
 
     @Column(nullable = false)
     private LocalDateTime registrationTime;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    // TODO complete
 }

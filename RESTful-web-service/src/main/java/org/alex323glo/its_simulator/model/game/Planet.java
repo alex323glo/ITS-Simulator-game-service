@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.awt.*;
 
 /**
  * Planet model.
@@ -22,11 +23,20 @@ import javax.persistence.*;
 @Builder
 public class Planet {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+   @Id
+   @GeneratedValue
+   private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+   @Column(nullable = false, unique = true)
+   private String name;
+
+
+   // Additional
+
+   @Column(nullable = false)
+   private Long positionX;
+
+   @Column(nullable = false)
+   private Long positionY;
 
 }
