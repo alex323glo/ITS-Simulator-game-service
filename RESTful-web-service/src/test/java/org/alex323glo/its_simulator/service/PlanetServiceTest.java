@@ -51,6 +51,25 @@ public class PlanetServiceTest {
     }
 
     @Test
+    public void createPlanet() throws AppException {
+        String anotherTestPlanetName = "another_" + TEST_PLANET_NAME;
+        Long anotherTestPlanetPositionX = 100L + TEST_PLANET_POSITION_X;
+        Long anotherTestPlanetPositionY = 100L + TEST_PLANET_POSITION_Y;
+
+        Planet createdPlanet = planetService.createPlanet(anotherTestPlanetName,
+                anotherTestPlanetPositionX, anotherTestPlanetPositionY);
+
+        Planet expectedPlanet = Planet.builder()
+                .id(createdPlanet.getId())
+                .name(anotherTestPlanetName)
+                .positionX(anotherTestPlanetPositionX)
+                .positionY(anotherTestPlanetPositionY)
+                .build();
+
+        assertEquals(expectedPlanet, createdPlanet);
+    }
+
+    @Test
     public void findPlanet() throws AppException {
         Planet actualPlanet = planetService.findPlanet(TEST_PLANET_NAME);
         assertEquals(testPlanet, actualPlanet);
@@ -61,5 +80,13 @@ public class PlanetServiceTest {
         List<Planet> planetList = planetService.findAllPlanets();
         List<Object> testPlanetList = Stream.builder().add(testPlanet).build().collect(Collectors.toList());
         assertEquals(testPlanetList, planetList);
+    }
+
+    @Test
+    public void deleteAllPlanets() throws AppException {
+        planetService.deleteAllPlanets();
+        List<Planet> planetList = planetRepository.findAll();
+        assertNotNull(planetList);
+        assertEquals(0, planetList.size());
     }
 }

@@ -93,6 +93,16 @@ public class Validator {
         return this;
     }
 
+    public Validator validatePlanetCoordinate(Long coordinate) throws ValidationException {
+        if (coordinate == null) {
+            throw new ValidationException("Planet coordinate validation failed (coordinate is null)");
+        }
+        if (coordinate < 0) {
+            throw new ValidationException("Planet coordinate validation failed (coordinate is negative)");
+        }
+        return this;
+    }
+
     public Validator validateSpaceShipName(String spaceShipName) throws ValidationException {
         if (spaceShipName == null) {
             throw new ValidationException("SpaceShip name validation failed (planet is null).");

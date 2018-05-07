@@ -36,6 +36,47 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     /**
+     * Saves new Planet to System.
+     *
+     * @param planetName unique and valid name of new Planet.
+     * @param positionX  valid X coordinate of new Planet.
+     * @param positionY  valid Y coordinate of new Planet.
+     * @return (not null) saved Planet, if operation was successfull.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public Planet createPlanet(String planetName, Long positionX, Long positionY) throws AppException {
+        LOGGER.info("Trying to create new Planet...");
+
+        try {
+            validator.validatePlanetName(planetName)
+                    .validatePlanetCoordinate(positionX).validatePlanetCoordinate(positionY);
+        } catch (ValidationException e) {
+            AppException exception = new AppException("Can't create new Planet. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (planetRepository.findByName(planetName) != null) {
+            AppException exception = new AppException("Attempt to create new Planet with duplicate name.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        Planet planet = Planet.builder()
+                .name(planetName)
+                .positionX(positionX)
+                .positionY(positionY)
+                .build();
+
+        Planet savedPlanet = planetRepository.save(planet);
+
+        LOGGER.info("Successfully created new Planet.");
+        return savedPlanet;
+    }
+
+    /**
      * Searches for existent Planet.
      *
      * @param planetName unique and valid Planet name.
@@ -78,5 +119,28 @@ public class PlanetServiceImpl implements PlanetService {
 
         LOGGER.info("Successfully found Planet by its name.");
         return planetList;
+    }
+
+    /**
+     * Deletes all planets from System.
+     * <p>
+     * If wasn't thrown any Exception, operation is completely successful.
+     *
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public void deleteAllPlanets() throws AppException {
+        LOGGER.info("Trying to delete all Planets...");
+
+        try {
+            planetRepository.deleteAll();
+        } catch (Exception e) {
+            AppException exception = new AppException("Can't delete all planets. " + e.getMessage(), e);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        LOGGER.info("Successfully deleted all Planets.");
     }
 }

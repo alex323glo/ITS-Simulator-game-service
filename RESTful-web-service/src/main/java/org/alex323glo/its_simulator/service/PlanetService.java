@@ -15,6 +15,18 @@ import java.util.List;
 public interface PlanetService {
 
     /**
+     * Saves new Planet to System.
+     *
+     * @param planetName unique and valid name of new Planet.
+     * @param positionX valid X coordinate of new Planet.
+     * @param positionY valid Y coordinate of new Planet.
+     * @return (not null) saved Planet, if operation was successfull.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    Planet createPlanet(String planetName, Long positionX, Long positionY) throws AppException;
+
+    /**
      * Searches for existent Planet.
      *
      * @param planetName unique and valid Planet name.
@@ -33,4 +45,13 @@ public interface PlanetService {
      */
     List<Planet> findAllPlanets() throws AppException;
 
+    /**
+     * Deletes all planets from System.
+     *
+     * If wasn't thrown any Exception, operation is completely successful.
+     *
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    void deleteAllPlanets() throws AppException;
 }
