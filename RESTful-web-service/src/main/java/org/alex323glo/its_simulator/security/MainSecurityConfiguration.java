@@ -1,27 +1,19 @@
 package org.alex323glo.its_simulator.security;
 
-import org.alex323glo.its_simulator.security.handlers.CustomAuthenticationFailureHandler;
-import org.alex323glo.its_simulator.security.handlers.CustomAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Main security configuration class
@@ -34,14 +26,14 @@ import java.io.IOException;
 @EnableWebSecurity
 public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    // TODO replace this method's logic with real UserDetailsService referencing!
+    @Lazy
+    @Autowired
+    @Qualifier("userServiceImpl")
+    private UserDetailsService userDetailsService;
+
     @Override
     protected UserDetailsService userDetailsService() {
-        return username -> User.builder()
-                .username("alex323glo")
-                .password(passwordEncoder().encode("12345678"))
-                .roles("USER")
-                .build();
+        return userDetailsService;
     }
 
     @Override
@@ -57,7 +49,6 @@ public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/")
-//                    .logoutSuccessHandler(logoutSuccessHandler())
                     .permitAll();
     }
 
@@ -78,42 +69,4 @@ public class MainSecurityConfiguration extends WebSecurityConfigurerAdapter {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
-
-    /*
-        Handlers:
-     */
-
-    @Bean
-    protected CustomAuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    protected CustomAuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
-    }
-
-//    @Bean
-//    protected LogoutSuccessHandler logoutSuccessHandler() {
-////        return (request, response, authentication) -> {
-////            if (authentication.isAuthenticated()) {
-////                try {
-////                    request.logout();
-////                } catch (ServletException e) {
-////                    try {
-////                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
-////                    } catch (IOException e1) {
-////                        e1.printStackTrace();
-////                    }
-////                }
-////            }
-////        };
-//        return (request, response, authentication) -> {
-//            try {
-//
-//            } catch (IOException ioe) {
-//
-//            }
-//        };
-//    }
 }

@@ -8,6 +8,7 @@ import org.alex323glo.its_simulator.model.game.SpaceShip;
 import org.alex323glo.its_simulator.service.MissionService;
 import org.alex323glo.its_simulator.service.PlanetService;
 import org.alex323glo.its_simulator.service.SpaceShipService;
+import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,12 @@ public class MissionConstructorController {
 
             List<SpaceShip> freeSpaceShipList = spaceShipService.findAllFreeShips(principal.getName());
 
+            freeSpaceShipList.forEach(ship -> {
+                ship.setUserGameProfile(
+                        CircularityResolver.resolveLazyGameProfile(
+                                ship.getUserGameProfile()));
+            });
+
             LOGGER.info("Successfully served '/private/mission-constructor/planet-list' endpoint " +
                     "(send List of free SpaceShips to '" + principal.getName() + "' user).");
             return new ResponseEntity<>(freeSpaceShipList, HttpStatus.OK);
@@ -132,27 +139,6 @@ public class MissionConstructorController {
         }
 
         try {
-
-//            Planet startPlanet = planetService.findPlanet(startPlanetName);
-//            Planet destinationPlanet = planetService.findPlanet(destinationPlanetName);
-//
-//            if (startPlanet == null || destinationPlanet == null) {
-//                LOGGER.warn("Can't find such Planets in Data Base.");
-//                return new ResponseEntity<>("Wrong Planet names were sent.", HttpStatus.NOT_FOUND);
-//            }
-//
-//            SpaceShip spaceShip = spaceShipService.findSpaceShip(principal.getName(), spaceShipName);
-//
-//            if (spaceShip == null) {
-//                LOGGER.warn("Can't find such SpaceShip in Data Base.");
-//                return new ResponseEntity<>("Wrong Space Ship name was sent.", HttpStatus.NOT_FOUND);
-//            }
-//
-//            Double maxCargoCapacity = spaceShip.getMaxCargoCapacity();
-//            if (convertedPayload < 0 || convertedPayload > maxCargoCapacity) {
-//                LOGGER.warn("Payload is not correct (doesn't match [0; " + maxCargoCapacity + "]).");
-//                return new ResponseEntity<>("Such payload is not valid for selected ship.", HttpStatus.NOT_FOUND);
-//            }
 
             MissionMetrics missionMetrics = missionService.generateMissionMetrics(
                     principal.getName(),
@@ -197,6 +183,10 @@ public class MissionConstructorController {
 
             Mission mission = missionService.constructNewMission(principal.getName(),
                     startPlanetName, destinationPlanetName, spaceShipName, convertedPayload);
+
+            mission.setUserGameProfile(
+                    CircularityResolver.resolveLazyGameProfile(
+                            mission.getUserGameProfile()));
 
             LOGGER.info("Successfully served '/private/mission-constructor/construct' endpoint " +
                     "(construct and send new Mission to '" + principal.getName() + "' user).");
