@@ -27,6 +27,7 @@ hs_err_pid*
 *.project
 *.classpath
 *.iml
+*.db
 
 # output directories
 **/build
@@ -34,3 +35,4 @@ hs_err_pid*
 
 # test in-memory databases' folder
 databases
+test_databases
