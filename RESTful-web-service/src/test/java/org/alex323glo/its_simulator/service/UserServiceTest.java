@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -53,7 +54,15 @@ public class UserServiceTest {
                 .email(TEST_EMAIL)
                 .registrationTime(LocalDateTime.now())
                 .build();
+        UserExtension anotherUserExtension = UserExtension.builder()
+                .email("another_" + TEST_EMAIL)
+                .registrationTime(LocalDateTime.now())
+                .build();
         UserGameProfile userGameProfile = UserGameProfile.builder()
+                .missions(new ArrayList<>())
+                .ships(new ArrayList<>())
+                .build();
+        UserGameProfile anotherUserGameProfile = UserGameProfile.builder()
                 .missions(new ArrayList<>())
                 .ships(new ArrayList<>())
                 .build();
@@ -63,11 +72,20 @@ public class UserServiceTest {
                 .userExtension(userExtension)
                 .userGameProfile(userGameProfile)
                 .build();
+        User anotherUser = User.builder()
+                .username("another_" + TEST_USERNAME)
+                .password(TEST_PASSWORD)
+                .userExtension(anotherUserExtension)
+                .userGameProfile(anotherUserGameProfile)
+                .build();
 
         userExtension.setUser(user);
         userGameProfile.setUser(user);
+        anotherUserExtension.setUser(anotherUser);
+        anotherUserGameProfile.setUser(anotherUser);
 
         testUser = userRepository.save(user);
+        userRepository.save(anotherUser);
     }
 
     @After
@@ -149,6 +167,52 @@ public class UserServiceTest {
         updatedUserExtension.getUser().getUserExtension().setUser(null);
 
         assertEquals(expectedUserExtension, updatedUserExtension);
+    }
+
+    @Test
+    public void listAllUsers() throws AppException {
+        List<User> expectedUsers = userRepository.findAll();
+        expectedUsers.forEach(expectedUser -> {
+            expectedUser.getUserGameProfile().setUser(null);
+            expectedUser.getUserGameProfile().setMissions(null);
+            expectedUser.getUserGameProfile().setShips(null);
+            expectedUser.getUserExtension().setUser(null);
+        });
+
+        List<User> allUsers = userService.listAllUsers();
+        allUsers.forEach(user -> {
+            user.getUserExtension().setUser(null);
+            user.getUserGameProfile().setUser(null);
+            user.getUserGameProfile().setMissions(null);
+            user.getUserGameProfile().setShips(null);
+        });
+
+        assertEquals(2, allUsers.size());
+        assertEquals(expectedUsers, allUsers);
+    }
+
+    @Test
+    public void deleteUserData() throws AppException {
+        List<User> oldUserList = userRepository.findAll();
+        assertEquals(2, oldUserList.size());
+        assertNotNull(userRepository.findByUsername(TEST_USERNAME));
+
+        userService.deleteUserData(TEST_USERNAME);
+
+        List<User> newUserList = userRepository.findAll();
+        assertEquals(1, newUserList.size());
+        assertNull(userRepository.findByUsername(TEST_USERNAME));
+    }
+
+    @Test
+    public void deleteAllUserData() throws AppException {
+        List<User> oldUserList = userRepository.findAll();
+        assertEquals(2, oldUserList.size());
+
+        userService.deleteAllUserData();
+
+        List<User> newUserList = userRepository.findAll();
+        assertEquals(0, newUserList.size());
     }
 
 

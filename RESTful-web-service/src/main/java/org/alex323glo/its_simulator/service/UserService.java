@@ -5,6 +5,8 @@ import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.model.UserExtension;
 import org.alex323glo.its_simulator.model.UserGameProfile;
 
+import java.util.List;
+
 /**
  * General User Service, which covers business logic of registration,
  * search and management of User data in System.
@@ -58,5 +60,39 @@ public interface UserService {
      * (see more in method's realisation).
      */
     UserExtension changeUserExtension(String username, UserExtension newUserExtension) throws AppException;
+
+
+    // DANGER:
+
+    /**
+     * Lists all registered Users.
+     *
+     * @return (not null) List of registered Users, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    List<User> listAllUsers() throws AppException;
+
+    /**
+     * Deletes all personal data of single registered User.
+     *
+     * WARNING! Missions data and SpaceShips data also belong to User data (and will be deleted too)!
+     *
+     * @param username unique and valid username of registered User.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    void deleteUserData(String username) throws AppException;
+
+    /**
+     * Deletes personal data of all registered Users.
+     *
+     * WARNING! Missions data and SpaceShips data also belong to User data (and will be deleted too)!
+     *
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    void deleteAllUserData() throws AppException;
+
 
 }

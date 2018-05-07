@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of UserService and UserDetailsService interfaces. See more in abstraction.
@@ -41,13 +43,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserExtensionRepository userExtensionRepository;
     private final UserGameProfileRepository userGameProfileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(Validator validator, UserRepository userRepository, UserExtensionRepository userExtensionRepository, UserGameProfileRepository userGameProfileRepository) {
+    public UserServiceImpl(Validator validator, UserRepository userRepository, UserExtensionRepository userExtensionRepository, UserGameProfileRepository userGameProfileRepository, PasswordEncoder passwordEncoder) {
         this.validator = validator;
         this.userRepository = userRepository;
         this.userExtensionRepository = userExtensionRepository;
         this.userGameProfileRepository = userGameProfileRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -97,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
         User user = User.builder()
                 .username(username)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .userGameProfile(userGameProfile)
                 .userExtension(userExtension)
                 .build();
@@ -216,6 +220,88 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         LOGGER.info("Successfully edited UserExtension by User's username with new UserExtension instance.");
         return storedUserExtension;
+    }
+
+    /**
+     * Lists all registered Users.
+     *
+     * @return (not null) List of registered Users, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public List<User> listAllUsers() throws AppException {
+        LOGGER.info("Trying to list all Users...");
+
+        List<User> userList = null;
+        try {
+            userList = userRepository.findAll();
+        } catch (Exception e) {
+            AppException exception = new AppException("Can't list all Users. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        LOGGER.info("Successfully listed all Users.");
+        return userList;
+    }
+
+    /**
+     * Deletes all personal data of single registered User.
+     * <p>
+     * WARNING! Missions data and SpaceShips data also belong to User data (and will be deleted too)!
+     *
+     * @param username unique and valid username of registered User.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public void deleteUserData(String username) throws AppException {
+        LOGGER.info("Trying to delete personal data of single User by User's username...");
+
+        try {
+            validator.validateUsername(username);
+        } catch (ValidationException e) {
+            AppException exception = new AppException(
+                    "Can't delete personal data of single User by User's username. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            AppException exception = new AppException("Attempt to delete personal data of non-existent User.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        userRepository.delete(user);
+
+        LOGGER.info("Successfully deleted personal data of single User by User's username.");
+    }
+
+    /**
+     * Deletes personal data of all registered Users.
+     * <p>
+     * WARNING! Missions data and SpaceShips data also belong to User data (and will be deleted too)!
+     *
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Override
+    public void deleteAllUserData() throws AppException {
+        LOGGER.info("Trying to delete personal data of all Users...");
+
+        try {
+            userRepository.deleteAll();
+        } catch (Exception e) {
+            AppException exception =
+                    new AppException("Can't delete personal data of all Users. " + e.getMessage());
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        LOGGER.info("Successfully deleted personal data of all Users.");
     }
 
     /**
