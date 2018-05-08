@@ -76,9 +76,6 @@ public class MissionServiceTest {
     private PlanetRepository planetRepository;
 
     @Autowired
-    private SpaceShipRepository spaceShipRepository;
-
-    @Autowired
     private Environment environment;
 
     @Before
@@ -195,7 +192,7 @@ public class MissionServiceTest {
 
     @Test
     public void cancelMission() throws AppException {
-        Mission mission = missionService.startMission(testUser.getUsername(), testMission);
+        missionService.startMission(testUser.getUsername(), testMission);
 
         Mission canceledMission = missionService.cancelMission(testUser.getUsername(), testMission);
         assertEquals(MissionStatus.CANCELED, canceledMission.getMissionStatus());

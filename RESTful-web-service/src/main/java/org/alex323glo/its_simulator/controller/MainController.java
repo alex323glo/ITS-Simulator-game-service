@@ -59,7 +59,7 @@ public class MainController {
             @RequestParam("email") String email) {
         LOGGER.info("Serving '/register' endpoint (POST request)...");
         try {
-            User registeredUser = userService.registerUser(username, password, email);
+            userService.registerUser(username, password, email);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create("/login"));
             LOGGER.info("Successfully served '/register' endpoint (user {username: '" +

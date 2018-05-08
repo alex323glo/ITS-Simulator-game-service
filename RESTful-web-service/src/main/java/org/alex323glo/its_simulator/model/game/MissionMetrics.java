@@ -5,10 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 /**
+ * Container for Mission metrics.
  *
+ * @author Alexey_O
+ * @version 0.1
+ *
+ * @see Mission
  */
 @AllArgsConstructor
 @NoArgsConstructor

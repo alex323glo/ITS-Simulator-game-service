@@ -1,7 +1,5 @@
 package org.alex323glo.its_simulator.exception;
 
-import java.security.PrivilegedActionException;
-
 /**
  * General Application Exception class.
  *

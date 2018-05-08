@@ -1,8 +1,6 @@
 package org.alex323glo.its_simulator.util;
 
 import org.alex323glo.its_simulator.exception.ValidationException;
-import org.alex323glo.its_simulator.model.game.Planet;
-import org.alex323glo.its_simulator.model.game.SpaceShip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -17,15 +15,11 @@ import org.springframework.stereotype.Component;
 public class Validator {
 
     private static final int DEFAULT_MIN_PASSWORD_LENGTH = 8;
-//    private static final String MESSAGE_TEMPLATE = "%s validation failed (%s).";
 
     private final int minPasswordLength;
 
-    private final Environment environment;
-
     @Autowired
     public Validator(Environment environment) {
-        this.environment = environment;
         minPasswordLength = environment.containsProperty("validation.password.min-length") ?
                 Integer.parseInt(environment.getProperty("validation.password.min-length")) :
                 DEFAULT_MIN_PASSWORD_LENGTH;

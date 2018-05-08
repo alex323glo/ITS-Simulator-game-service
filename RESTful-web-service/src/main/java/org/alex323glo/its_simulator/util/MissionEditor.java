@@ -4,8 +4,6 @@ import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.model.game.Planet;
 import org.alex323glo.its_simulator.model.game.SpaceShip;
 
-import java.time.LocalTime;
-
 /**
  * Additional util class, which helps to
  * safely modify Mission object data (without change of non-changeable fields)
@@ -21,32 +19,32 @@ public class MissionEditor {
         tempMission = new Mission();
     }
 
-    MissionEditor spaceShip(SpaceShip spaceShip) {
+    public MissionEditor spaceShip(SpaceShip spaceShip) {
         tempMission.setSpaceShip(spaceShip);
         return this;
     }
 
-    MissionEditor startingPoint(Planet startingPoint) {
+    public MissionEditor startingPoint(Planet startingPoint) {
         tempMission.setStartPoint(startingPoint);
         return this;
     }
 
-    MissionEditor destinationPoint(Planet destinationPoint) {
+    public MissionEditor destinationPoint(Planet destinationPoint) {
         tempMission.setStartPoint(destinationPoint);
         return this;
     }
 
-    MissionEditor payload(Double payload) {
+    public MissionEditor payload(Double payload) {
         tempMission.setPayload(payload);
         return this;
     }
 
-    MissionEditor duration(Long duration) {
+    public MissionEditor duration(Long duration) {
         tempMission.setDuration(duration);
         return this;
     }
 
-    Mission merge(Mission mission) {
+    public Mission merge(Mission mission) {
         if (tempMission.getSpaceShip() != null) {
             mission.setSpaceShip(tempMission.getSpaceShip());
         }

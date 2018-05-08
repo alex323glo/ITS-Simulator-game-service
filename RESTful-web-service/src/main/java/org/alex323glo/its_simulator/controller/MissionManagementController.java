@@ -1,7 +1,6 @@
 package org.alex323glo.its_simulator.controller;
 
 import org.alex323glo.its_simulator.exception.AppException;
-import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.service.MissionService;
 import org.alex323glo.its_simulator.service.UserService;
@@ -40,12 +39,10 @@ public class MissionManagementController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MissionManagementController.class);
 
     private final MissionService missionService;
-    private final UserService userService;
 
     @Autowired
-    public MissionManagementController(MissionService missionService, UserService userService) {
+    public MissionManagementController(MissionService missionService) {
         this.missionService = missionService;
-        this.userService = userService;
     }
 
     @GetMapping("/missions")
@@ -57,14 +54,6 @@ public class MissionManagementController {
         }
 
         try {
-
-//            UserGameProfile gameProfile = userService.findUserGameProfile(principal.getName());
-//
-//            if (gameProfile == null) {
-//                LOGGER.error("Can't find needed UserGameProfile in Data Base.");
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-
             List<Mission> allMissions = missionService.findAllMissions(principal.getName());
             allMissions.forEach(mission -> mission.setUserGameProfile(
                     CircularityResolver.resolveLazyGameProfile(
