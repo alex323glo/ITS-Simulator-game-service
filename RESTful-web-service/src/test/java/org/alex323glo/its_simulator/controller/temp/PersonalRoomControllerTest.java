@@ -1,5 +1,5 @@
 package org.alex323glo.its_simulator.controller.temp;
-
+/*
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.model.UserExtension;
@@ -7,6 +7,7 @@ import org.alex323glo.its_simulator.repository.UserRepository;
 import org.alex323glo.its_simulator.service.UserService;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PersonalRoomControllerTest {
-/*
+
     private static final String TEST_USERNAME = "test";
     private static final String TEST_PASSWORD = "12345678";
     private static final String TEST_EMAIL = "test@mail.com";
@@ -93,5 +95,5 @@ public class PersonalRoomControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-    }*/
-}
+    }
+}*/

@@ -3,7 +3,6 @@ package org.alex323glo.its_simulator.controller;
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.model.UserExtension;
-import org.alex323glo.its_simulator.repository.UserRepository;
 import org.alex323glo.its_simulator.service.UserService;
 import org.junit.After;
 import org.junit.Before;

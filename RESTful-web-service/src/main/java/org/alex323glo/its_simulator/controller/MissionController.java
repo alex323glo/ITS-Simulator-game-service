@@ -3,6 +3,7 @@ package org.alex323glo.its_simulator.controller;
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.service.MissionService;
+import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,10 @@ public class MissionController {
 
         try {
             Mission mission = missionService.findMission(principal.getName(), convertedMissionId);
+            mission.setUserGameProfile(
+                    CircularityResolver.resolveLazyGameProfile(
+                            mission.getUserGameProfile()));
+
             if (mission == null) {
                 LOGGER.warn("Can't find such mission in Data Base.");
                 return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.NOT_FOUND);
@@ -113,11 +118,14 @@ public class MissionController {
                 return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.NOT_FOUND);
             }
 
-            missionService.startMission(principal.getName(), mission);
+            Mission startedMission = missionService.startMission(principal.getName(), mission);
+            startedMission.setUserGameProfile(
+                    CircularityResolver.resolveLazyGameProfile(
+                            startedMission.getUserGameProfile()));
 
             LOGGER.info("Successfully served '/private/mission/start' endpoint " +
                     "(start Mission of '" + principal.getName() + "' user).");
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(startedMission, HttpStatus.OK);
         } catch (AppException e) {
             LOGGER.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -150,11 +158,14 @@ public class MissionController {
                 return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.NOT_FOUND);
             }
 
-            missionService.cancelMission(principal.getName(), mission);
+            Mission canceledMission = missionService.cancelMission(principal.getName(), mission);
+            canceledMission.setUserGameProfile(
+                    CircularityResolver.resolveLazyGameProfile(
+                            canceledMission.getUserGameProfile()));
 
             LOGGER.info("Successfully served '/private/mission/cancel' endpoint " +
                     "(cancel Mission of '" + principal.getName() + "' user).");
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(canceledMission, HttpStatus.OK);
         } catch (AppException e) {
             LOGGER.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

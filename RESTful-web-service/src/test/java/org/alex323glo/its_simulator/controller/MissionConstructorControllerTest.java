@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -107,6 +106,7 @@ public class MissionConstructorControllerTest {
     @After
     public void tearDown() throws Exception {
         userService.deleteAllUserData();
+        planetService.deleteAllPlanets();
     }
 
     @Test
@@ -127,18 +127,16 @@ public class MissionConstructorControllerTest {
         mockMvc
                 .perform(get(GET_ALL_FREE_SPACE_SHIPS_URI).with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-//                .andDo(result -> {
-//                    List<SpaceShip> freeSpaceShipList = spaceShipService.findAllFreeShips(TEST_USERNAME);
-//                    freeSpaceShipList.forEach(ship -> {
-//                        ship.setUserGameProfile(
-//                                CircularityResolver.resolveLazyGameProfile(
-//                                        ship.getUserGameProfile()));
-//                    });
-//                    List<Object> parsedList = new JacksonJsonParser()
-//                            .parseList(result.getResponse().getContentAsString());
-//                    assertEquals(freeSpaceShipList, parsedList);
-//                });
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(result -> {
+                    List<SpaceShip> freeSpaceShipList = spaceShipService.findAllFreeShips(TEST_USERNAME);
+                    freeSpaceShipList.forEach(ship -> ship.setUserGameProfile(
+                            CircularityResolver.resolveLazyGameProfile(
+                                    ship.getUserGameProfile())));
+
+                    String freeSpaceShipListJSON = new JacksonJsonProvider().toJson(freeSpaceShipList);
+                    assertEquals(freeSpaceShipListJSON, result.getResponse().getContentAsString());
+                });
     }
 
     @Test

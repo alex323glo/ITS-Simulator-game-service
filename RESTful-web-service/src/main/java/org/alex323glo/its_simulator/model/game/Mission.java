@@ -1,16 +1,15 @@
 package org.alex323glo.its_simulator.model.game;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.alex323glo.its_simulator.model.UserGameProfile;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.alex323glo.its_simulator.util.CustomLocalDateTimeSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Mission model.
@@ -49,12 +48,15 @@ public class Mission {
     private Planet destinationPoint;
 
     @Column(nullable = false)
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private LocalDateTime registrationTime;
 
     @Column(nullable = true)
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private LocalDateTime startTime;
 
     @Column(nullable = true)
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private LocalDateTime finishTime;
 
     @Column(precision = 3)

@@ -1,9 +1,10 @@
 package org.alex323glo.its_simulator.controller.temp;
-
+/*
 import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MainControllerTest {
-/*
+
     private static final String TEST_USERNAME = "test";
     private static final String TEST_PASSWORD = "12345678";
     private static final String TEST_EMAIL = "test@mail.com";
@@ -84,5 +85,5 @@ public class MainControllerTest {
         assertNotNull(user);
         assertEquals(TEST_USERNAME, user.getUsername());
         assertTrue(passwordEncoder.matches(TEST_PASSWORD, user.getPassword()));
-    }*/
-}
+    }
+}*/

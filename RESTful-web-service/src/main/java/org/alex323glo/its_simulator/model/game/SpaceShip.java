@@ -1,10 +1,12 @@
 package org.alex323glo.its_simulator.model.game;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.alex323glo.its_simulator.model.UserGameProfile;
+import org.alex323glo.its_simulator.util.CustomLocalDateTimeSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +40,7 @@ public class SpaceShip {
     private Double maxCargoCapacity;
 
     @Column(nullable = false)
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private LocalDateTime creationTime;
 
     @Enumerated(EnumType.STRING)

@@ -1,9 +1,11 @@
 package org.alex323glo.its_simulator.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.alex323glo.its_simulator.util.CustomLocalDateTimeSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,6 +37,7 @@ public class UserExtension {
     private User user;
 
     @Column(nullable = false)
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private LocalDateTime registrationTime;
 
 }
