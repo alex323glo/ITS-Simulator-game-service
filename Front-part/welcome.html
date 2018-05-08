@@ -11,7 +11,7 @@
     <title>ITS Simulator - Welcome</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="./welcome-page-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="./welcome-page-resources/css/scrolling-nav.css" rel="stylesheet">
@@ -32,8 +32,8 @@
                     <img src="./welcome-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Nav Bar -->
                 <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -56,7 +56,7 @@
                             <!--
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AuthorizationModal">Log in</button>
                             -->
-                            <a class="btn btn-primary" href="/login.html">Log in</a>
+                            <a class="btn btn-primary" href="./login.html">Log in</a>
                         </li>
                         <li class="nav-item" v-if="!isAuthenticated">
                             <div style="width: 10px;"></div>
@@ -65,11 +65,14 @@
                             <!--
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#RegistrationModal">Sign up</button>
                             -->
-                            <a class="btn btn-success" href="/login.html">Sign up</a>
+                            <a class="btn btn-success" href="./login.html">Sign up</a>
                         </li>
 
                         <li class="nav-item" v-if="isAuthenticated">
-                            <a href="/" class="btn btn-info">{{username}}</a>
+                            <a href="./private/personal.html" class="btn btn-outline-secondary">
+                                {{username}}
+                                <img src="./welcome-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                            </a>
                         </li>
                         <li class="nav-item" v-if="isAuthenticated">
                             <div style="width: 10px;"></div>
@@ -157,11 +160,11 @@
     </div>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="./welcome-page-resources/vendor/jquery/jquery.min.js"></script>
-    <script src="./welcome-page-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="./common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="./common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="./welcome-page-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="./common-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom JavaScript for this theme -->
     <script src="./welcome-page-resources/js/scrolling-nav.js"></script>
