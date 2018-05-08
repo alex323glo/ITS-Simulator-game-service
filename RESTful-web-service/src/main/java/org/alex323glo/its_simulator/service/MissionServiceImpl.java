@@ -2,7 +2,6 @@ package org.alex323glo.its_simulator.service;
 
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.exception.ValidationException;
-import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.*;
 import org.alex323glo.its_simulator.repository.MissionRepository;
 import org.alex323glo.its_simulator.util.Validator;
@@ -137,6 +136,7 @@ public class MissionServiceImpl implements MissionService {
         }
 
         storedMission.get().setMissionStatus(MissionStatus.STARTED);
+        storedMission.get().setStartTime(LocalDateTime.now());
 //        missionRepository.flush();
 
         LOGGER.info("Successfully started Mission by User's username and Mission instance.");
@@ -159,7 +159,7 @@ public class MissionServiceImpl implements MissionService {
 
         if (mission == null || mission.getId() == null) {
             AppException exception =
-                    new AppException("Can't user Mission instance: Mission instance is null of Mission.id is null.");
+                    new AppException("Can't use Mission instance: Mission instance is null or Mission.id is null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
@@ -194,9 +194,68 @@ public class MissionServiceImpl implements MissionService {
         }
 
         storedMission.get().setMissionStatus(MissionStatus.CANCELED);
+        storedMission.get().setFinishTime(LocalDateTime.now());
 //        missionRepository.flush();
 
         LOGGER.info("Successfully canceled Mission by User's username and Mission instance.");
+        return storedMission.get();
+    }
+
+    /**
+     * Completes User's (started) Mission.
+     *
+     * @param username unique and valid username of registered User.
+     * @param mission  needed Mission instance.
+     * @return (not null) updated Mission object, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     *                      (see more in method's realisation).
+     */
+    @Transactional
+    @Override
+    public Mission completeMission(String username, Mission mission) throws AppException {
+        LOGGER.info("Trying to complete Mission by User's username and Mission instance...");
+
+        if (mission == null || mission.getId() == null) {
+            AppException exception =
+                    new AppException("Can't use Mission instance: Mission instance is null or Mission.id is null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        try {
+            validator.validateUsername(username);
+        } catch (ValidationException e) {
+            LOGGER.error("Can't complete Mission by User's username and Mission instance. " + e.getMessage(), e);
+            throw new AppException(e);
+        }
+
+        Optional<Mission> storedMission = missionRepository.findById(mission.getId());
+        if (!storedMission.isPresent()) {
+            LOGGER.warn("No Mission with such ID was saved to System.");
+            return null;
+        }
+
+        String storedUsername = storedMission.get().getUserGameProfile().getUser().getUsername();
+        if (!username.equals(storedUsername)) {     // TODO replace with more special Exception type!!!
+            AppException exception = new AppException(
+                    "Attempt to access private data (Mission) by User, who is not its owner at all.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        MissionStatus missionStatus = storedMission.get().getMissionStatus();
+        if (missionStatus != MissionStatus.STARTED) {
+            AppException exception = new AppException("Attempt to complete Mission, which status is " +
+                    missionStatus.name() + " (not STARTED, as required).");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        storedMission.get().setMissionStatus(MissionStatus.COMPLETED);
+        storedMission.get().setFinishTime(LocalDateTime.now());
+//        missionRepository.flush();
+
+        LOGGER.info("Successfully completed Mission by User's username and Mission instance.");
         return storedMission.get();
     }
 
@@ -262,8 +321,8 @@ public class MissionServiceImpl implements MissionService {
                 .destinationPositionY(destinationPlanet.getPositionY())
                 .build();
 
-        Double shipLevelCoefficient = null;
-        Double timeCoefficient = null;
+        Double shipLevelCoefficient;
+        Double timeCoefficient;
         try {
             shipLevelCoefficient = Double.valueOf(environment.getProperty("game.mechanics.ship_level_coefficient"));
             timeCoefficient = Double.valueOf(environment.getProperty("game.mechanics.time_coefficient_seconds"));
@@ -335,8 +394,8 @@ public class MissionServiceImpl implements MissionService {
             throw exception;
         }
 
-        Double shipLevelCoefficient = null;
-        Double timeCoefficient = null;
+        Double shipLevelCoefficient;
+        Double timeCoefficient;
         try {
             shipLevelCoefficient = Double.valueOf(environment.getProperty("game.mechanics.ship_level_coefficient"));
             timeCoefficient = Double.valueOf(environment.getProperty("game.mechanics.time_coefficient_seconds"));

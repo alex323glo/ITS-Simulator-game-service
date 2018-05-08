@@ -196,13 +196,28 @@ public class MissionServiceTest {
     @Test
     public void cancelMission() throws AppException {
         Mission mission = missionService.startMission(testUser.getUsername(), testMission);
-        mission.setMissionStatus(MissionStatus.CANCELED);
+
         Mission canceledMission = missionService.cancelMission(testUser.getUsername(), testMission);
         assertEquals(MissionStatus.CANCELED, canceledMission.getMissionStatus());
 
         Optional<Mission> storedMissionOptional = missionRepository.findById(canceledMission.getId());
         if (storedMissionOptional.isPresent()) {
             assertEquals(MissionStatus.CANCELED, storedMissionOptional.get().getMissionStatus());
+        } else {
+            fail("mission is not present in DB");
+        }
+    }
+
+    @Test
+    public void completeMission() throws AppException {
+        Mission mission = missionService.startMission(testUser.getUsername(), testMission);
+
+        Mission completedMission = missionService.completeMission(testUser.getUsername(), testMission);
+        assertEquals(MissionStatus.COMPLETED, completedMission.getMissionStatus());
+
+        Optional<Mission> storedMissionOptional = missionRepository.findById(completedMission.getId());
+        if (storedMissionOptional.isPresent()) {
+            assertEquals(MissionStatus.COMPLETED, storedMissionOptional.get().getMissionStatus());
         } else {
             fail("mission is not present in DB");
         }

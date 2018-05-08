@@ -1,11 +1,8 @@
 package org.alex323glo.its_simulator.service;
 
 import org.alex323glo.its_simulator.exception.AppException;
-import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.model.game.MissionMetrics;
-import org.alex323glo.its_simulator.model.game.Planet;
-import org.alex323glo.its_simulator.model.game.SpaceShip;
 
 import java.util.List;
 
@@ -50,6 +47,17 @@ public interface MissionService {
      * (see more in method's realisation).
      */
     Mission cancelMission(String username, Mission mission) throws AppException;
+
+    /**
+     * Completes User's (started) Mission.
+     *
+     * @param username unique and valid username of registered User.
+     * @param mission needed Mission instance.
+     * @return (not null) updated Mission object, if operation was successful.
+     * @throws AppException if System can't carry out this operation in some reasons
+     * (see more in method's realisation).
+     */
+    Mission completeMission(String username, Mission mission) throws AppException;
 
     /**
      * Calculates Mission metrics (MissionMetrics object) according to proposed params.
