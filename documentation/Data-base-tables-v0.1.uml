@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>8d957d92-469c-4b83-8a89-ec8de7d16eff.SCHEMA:DATA_SOURCE.PUBLIC</OriginalElement>
+  <nodes>
+    <node x="29.254166666666663" y="720.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS</node>
+    <node x="289.1791666666667" y="169.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USERS</node>
+    <node x="297.6791666666667" y="797.5">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_SHIPS</node>
+    <node x="31.75" y="540.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.PLANETS</node>
+    <node x="285.6791666666667" y="0.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_EXTENSIONS</node>
+    <node x="241.49166666666665" y="999.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_CONTRACTS</node>
+    <node x="324.6791666666667" y="360.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES</node>
+    <node x="204.75" y="485.0">8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USERS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES">
+      <point x="55.75" y="70.5" />
+      <point x="456.4291666666667" y="335.0" />
+      <point x="438.6791666666667" y="335.0" />
+      <point x="38.0" y="-37.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_SHIPS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES">
+      <point x="55.75" y="-37.0" />
+      <point x="464.9291666666667" y="465.0" />
+      <point x="419.6791666666667" y="465.0" />
+      <point x="19.0" y="37.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_CONTRACTS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS">
+      <point x="-56.5" y="-37.0" />
+      <point x="297.9916666666667" y="974.0" />
+      <point x="144.75416666666666" y="974.0" />
+      <point x="0.0" y="114.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS">
+      <point x="46.19999999999999" y="-114.5" />
+      <point x="190.95416666666665" y="690.0" />
+      <point x="244.08333333333331" y="690.0" />
+      <point x="-78.66666666666667" y="92.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS">
+      <point x="0.0" y="92.5" />
+      <point x="322.75" y="700.0" />
+      <point x="237.15416666666667" y="700.0" />
+      <point x="92.4" y="-114.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USERS">
+      <point x="-38.0" y="-37.5" />
+      <point x="362.6791666666667" y="335.0" />
+      <point x="344.9291666666667" y="335.0" />
+      <point x="-55.75" y="70.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USERS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_EXTENSIONS">
+      <point x="-55.75" y="-70.5" />
+      <point x="344.9291666666667" y="144.0" />
+      <point x="343.1791666666667" y="144.0" />
+      <point x="-57.5" y="59.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES">
+      <point x="0.0" y="-92.5" />
+      <point x="322.75" y="465.0" />
+      <point x="381.6791666666667" y="465.0" />
+      <point x="-19.0" y="37.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_CONTRACTS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES">
+      <point x="56.5" y="-37.0" />
+      <point x="410.9916666666667" y="974.0" />
+      <point x="531.1791666666667" y="974.0" />
+      <point x="531.1791666666667" y="455.0" />
+      <point x="457.6791666666667" y="455.0" />
+      <point x="57.0" y="37.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES">
+      <point x="-92.39999999999998" y="-114.5" />
+      <point x="52.354166666666686" y="700.0" />
+      <point x="21.250000000000057" y="700.0" />
+      <point x="21.250000000000057" y="455.0" />
+      <point x="343.6791666666667" y="455.0" />
+      <point x="-57.0" y="37.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_EXTENSIONS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USERS">
+      <point x="57.5" y="59.5" />
+      <point x="458.1791666666667" y="144.0" />
+      <point x="456.4291666666667" y="144.0" />
+      <point x="55.75" y="-70.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.USER_GAME_PROFILES_SHIPS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS">
+      <point x="-55.75" y="-37.0" />
+      <point x="353.4291666666667" y="700.0" />
+      <point x="401.4166666666667" y="700.0" />
+      <point x="78.66666666666669" y="92.5" />
+    </edge>
+    <edge source="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.CONTRACTS" target="8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.PLANETS">
+      <point x="-46.19999999999999" y="-114.5" />
+      <point x="98.55416666666667" y="700.0" />
+      <point x="70.0" y="700.0" />
+      <point x="-38.25" y="37.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.4089661482159195" x="308.5" y="536.5" />
+  <SelectedNodes>
+    <node>8d957d92-469c-4b83-8a89-ec8de7d16eff.TABLE:DATA_SOURCE.PUBLIC.SPACE_SHIPS</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+

@@ -24,9 +24,15 @@ hs_err_pid*
 **/.gradle
 **/.idea
 **/.settings
-.project
-.classpath
+*.project
+*.classpath
+*.iml
+*.db
 
 # output directories
 **/build
 **/out
+
+# test in-memory databases' folder
+databases
+test_databases
