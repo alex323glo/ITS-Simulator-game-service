@@ -30,7 +30,17 @@ public class WebMvcResourcesHandlerConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/",
                 environment.getProperty("front-part.index-page.url"));
+
+//        registry.addViewController("/login").setViewName("login");
     }
+
+//    @Bean
+//    ViewResolver viewResolver() {
+//        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//        viewResolver.setPrefix("/views/");
+//        viewResolver.setSuffix(".html");
+//        return viewResolver;
+//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
