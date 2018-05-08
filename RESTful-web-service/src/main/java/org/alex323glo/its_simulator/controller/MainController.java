@@ -1,7 +1,6 @@
 package org.alex323glo.its_simulator.controller;
 
 import org.alex323glo.its_simulator.exception.AppException;
-import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

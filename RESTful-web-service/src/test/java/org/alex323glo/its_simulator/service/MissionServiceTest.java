@@ -7,7 +7,6 @@ import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.*;
 import org.alex323glo.its_simulator.repository.MissionRepository;
 import org.alex323glo.its_simulator.repository.PlanetRepository;
-import org.alex323glo.its_simulator.repository.SpaceShipRepository;
 import org.alex323glo.its_simulator.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +58,6 @@ public class MissionServiceTest {
     private static User testUser;
     private static Mission testMission;
     private static SpaceShip testSpaceShip;
-    private static SpaceShip anotherTestSpaceShip;
     private static Planet testStartPlanet;
     private static Planet testDestinationPlanet;
 
@@ -134,7 +132,7 @@ public class MissionServiceTest {
                 .speed(TEST_SPACE_SHIP_SPEED)
                 .spaceShipStatus(SpaceShipStatus.BUSY)
                 .build();
-        anotherTestSpaceShip = SpaceShip.builder()
+        SpaceShip anotherTestSpaceShip = SpaceShip.builder()
                 .userGameProfile(testUser.getUserGameProfile())
                 .name(ANOTHER_TEST_SPACE_SHIP_NAME)
                 .maxCargoCapacity(TEST_SPACE_SHIP_MAX_CARGO_CAPACITY)
@@ -207,7 +205,7 @@ public class MissionServiceTest {
 
     @Test
     public void completeMission() throws AppException {
-        Mission mission = missionService.startMission(testUser.getUsername(), testMission);
+        missionService.startMission(testUser.getUsername(), testMission);
 
         Mission completedMission = missionService.completeMission(testUser.getUsername(), testMission);
         assertEquals(MissionStatus.COMPLETED, completedMission.getMissionStatus());
