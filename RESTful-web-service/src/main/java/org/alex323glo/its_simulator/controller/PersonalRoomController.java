@@ -1,10 +1,10 @@
 package org.alex323glo.its_simulator.controller;
 
 import org.alex323glo.its_simulator.exception.AppException;
-import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.model.UserExtension;
 import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.service.UserService;
+import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class PersonalRoomController {
 
 
     @GetMapping("/user-data")
-    public ResponseEntity<User> sendUserData(Principal principal) {
+    public ResponseEntity<UserGameProfile> sendUserData(Principal principal) {
         LOGGER.info("Serving '/private/personal-room/user-extension' endpoint (GET request)...");
         if (principal == null) {
             LOGGER.warn("Non-authorized User tries to access private info (User object data)!");
@@ -65,9 +65,11 @@ public class PersonalRoomController {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
 
+                userGameProfile = CircularityResolver.resolveLazyGameProfile(userGameProfile);
+
                 LOGGER.info("Successfully served '/private/personal-room/user-extension' endpoint " +
                         "(send User object data to '" + principal.getName() + "' user).");
-                return new ResponseEntity<>(userGameProfile.getUser(), HttpStatus.OK);
+                return new ResponseEntity<>(userGameProfile, HttpStatus.OK);
             } catch (AppException e) {
                 LOGGER.error(e.getMessage(), e);
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -94,8 +96,11 @@ public class PersonalRoomController {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
 
-                UserExtension changedUserExtension =
-                        userService.changeUserExtension(principal.getName(), newUserExtension);
+                UserExtension changedUserExtension = userService
+                        .changeUserExtension(principal.getName(), newUserExtension);
+
+                changedUserExtension = CircularityResolver
+                        .resolveUserExtensionWithLazyGameProfile(changedUserExtension);
 
                 LOGGER.info("Successfully served '/private/personal-room/user-extension' endpoint " +
                         "(edited UserExtension object data of '" + principal.getName() + "' user).");

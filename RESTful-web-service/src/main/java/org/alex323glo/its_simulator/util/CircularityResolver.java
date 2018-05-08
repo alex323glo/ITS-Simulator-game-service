@@ -1,6 +1,7 @@
 package org.alex323glo.its_simulator.util;
 
 import org.alex323glo.its_simulator.model.User;
+import org.alex323glo.its_simulator.model.UserExtension;
 import org.alex323glo.its_simulator.model.UserGameProfile;
 
 /**
@@ -41,11 +42,33 @@ public class CircularityResolver {
     public static UserGameProfile resolveLazyGameProfile(UserGameProfile gameProfile) {
         if (gameProfile.getUser() != null) {
             gameProfile.getUser().setUserGameProfile(null);
-            gameProfile.getUser().getUserExtension().setUser(null);
+
+            if (gameProfile.getUser().getUserExtension() != null) {
+                gameProfile.getUser().getUserExtension().setUser(null);
+            }
         }
         gameProfile.setMissions(null);
         gameProfile.setShips(null);
         return gameProfile;
+    }
+
+    /**
+     * Resolves circular references of target UserExtension instance.
+     *
+     * @param userExtension target instance.
+     * @return fixed target instance.
+     */
+    public static UserExtension resolveUserExtensionWithLazyGameProfile(UserExtension userExtension) {
+        if (userExtension.getUser() != null) {
+            userExtension.getUser().setUserExtension(null);
+
+            if (userExtension.getUser().getUserGameProfile() != null) {
+                userExtension.getUser().getUserGameProfile().setUser(null);
+                userExtension.getUser().getUserGameProfile().setShips(null);
+                userExtension.getUser().getUserGameProfile().setMissions(null);
+            }
+        }
+        return userExtension;
     }
 
 }

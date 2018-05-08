@@ -5,6 +5,7 @@ import org.alex323glo.its_simulator.model.UserGameProfile;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.service.MissionService;
 import org.alex323glo.its_simulator.service.UserService;
+import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,9 @@ public class MissionManagementController {
 //            }
 
             List<Mission> allMissions = missionService.findAllMissions(principal.getName());
+            allMissions.forEach(mission -> mission.setUserGameProfile(
+                    CircularityResolver.resolveLazyGameProfile(
+                            mission.getUserGameProfile())));
 
             LOGGER.info("Successfully served '/private/mission-management/missions' endpoint " +
                     "(send List of Missions to '" + principal.getName() + "' user).");
