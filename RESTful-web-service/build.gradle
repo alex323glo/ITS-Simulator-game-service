@@ -30,6 +30,18 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+// For Travis:
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+// For Travis:
+sourceSets {
+    main {
+        output.resourcesDir = "build/classes/main"
+    }
+}
+
 dependencies {
 
     compile('org.springframework:spring-tx')
