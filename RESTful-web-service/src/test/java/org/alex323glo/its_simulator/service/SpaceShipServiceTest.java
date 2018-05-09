@@ -83,6 +83,9 @@ public class SpaceShipServiceTest {
                         UserGameProfile.builder()
                                 .missions(new ArrayList<>())
                                 .ships(spaceShipList)
+                                .experience(0L)
+                                .completedMissionsNumber(0)
+                                .shipsNumber(1)
                                 .build()
                 )
                 .build();
@@ -111,7 +114,7 @@ public class SpaceShipServiceTest {
                 TEST_SPACE_SHIP_LEVEL,
                 TEST_SPACE_SHIP_SPEED);
 
-        SpaceShip expectedSpaceShip = spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(
+        SpaceShip expectedSpaceShip = spaceShipRepository.findByNameAndUserGameProfile_User_Username(
                 anotherTestSpaceShipName, TEST_USERNAME);
 
         anotherTestSpaceShip.getUserGameProfile().getUser().setUserGameProfile(null);
@@ -129,7 +132,7 @@ public class SpaceShipServiceTest {
 
     @Test
     public void findSpaceShip() throws AppException {
-        SpaceShip expectedSpaceShip = spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(
+        SpaceShip expectedSpaceShip = spaceShipRepository.findByNameAndUserGameProfile_User_Username(
                 TEST_SPACE_SHIP_NAME, TEST_USERNAME);
         SpaceShip actualSpaceShip = spaceShipService.findSpaceShip(TEST_USERNAME, TEST_SPACE_SHIP_NAME);
 

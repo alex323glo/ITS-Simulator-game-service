@@ -94,6 +94,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserGameProfile userGameProfile = UserGameProfile.builder()
                 .ships(new ArrayList<>())
                 .missions(new ArrayList<>())
+                .experience(0L)
+                .completedMissionsNumber(0)
+                .shipsNumber(0)
                 .build();
         UserExtension userExtension = UserExtension.builder()
                 .email(email)
@@ -229,6 +232,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public List<User> listAllUsers() throws AppException {
         LOGGER.info("Trying to list all Users...");
@@ -255,6 +259,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public void deleteUserData(String username) throws AppException {
         LOGGER.info("Trying to delete personal data of single User by User's username...");
@@ -288,6 +293,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public void deleteAllUserData() throws AppException {
         LOGGER.info("Trying to delete personal data of all Users...");

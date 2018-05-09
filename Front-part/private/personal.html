@@ -8,37 +8,40 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Round About - Start Bootstrap Template</title>
+    <title>ITS Simulator - Personal</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="personal-page-resources/css/round-about.css" rel="stylesheet">
+    <link href="./personal-page-resources/css/round-about.css" rel="stylesheet">
+
+    <link href="./personal-page-resources/css/scrolling-nav.css" rel="stylesheet">
+
+
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-resource@1.5.0/dist/vue-resource.min.js"></script>
 
 </head>
 
 <body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                    <img src="./personal-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Logo -->
-            <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
-                <img src="./personal-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <!--
                     <li class="nav-item">
                         <a class="nav-link" href="../welcome.html#about">About</a>
                     </li>
@@ -47,84 +50,307 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../welcome.html#contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+                    </li>-->
 
-    <!-- Page Content -->
-    <div class="container">
 
-        <!-- Introduction Row -->
-        <h1 class="my-4">About Us
-            <small>It's Nice to Meet You!</small>
-        </h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, explicabo dolores ipsam aliquam inventore corrupti eveniet quisquam quod totam laudantium repudiandae obcaecati ea consectetur debitis velit facere nisi expedita vel?</p>
+                        <li class="nav-item">
+                            <div style="width: 50px; height: 20px;"></div>
+                        </li>
 
-        <!-- Team Members Row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <h2 class="my-4">Our Team</h2>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-            <div class="col-lg-4 col-sm-6 text-center mb-4">
-                <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
-                <h3>John Smith
-                    <small>Job Title</small>
-                </h3>
-                <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-            </div>
-        </div>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success btn-lg" href="./login.html">Play now!</a>
+                        </li>
 
-    </div>
-    <!-- /.container -->
+                        <li class="nav-item">
+                            <div style="width: 200px; height: 20px;"></div>
+                        </li>
 
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
+
+
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="#you">You</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="#stats">Stats</a>
+                        </li>
+
+
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                        <li class="nav-item active">
+                            <a class="nav-link js-scroll-trigger" href="#">{{userData.username}}
+                            <span class="sr-only">(current)</span>
+                            <img src="./personal-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                        </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                        <li class="nav-item">
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Log out</button>
+                            </form>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+
+            <div class="container" style="padding: 50px;">
+                <h1 class="my-2 text-center">
+                    <img src="./personal-page-resources/img/secure-ok-512.png" width="100px;" alt=""> Personal page
+                    <br>
+                    <small>Here You can check your stats, see and edit your personal info.</small>
+                </h1>
+            </div>
+
+            <!-- Introduction Row -->
+            <section id="you">
+
+                <h2 class="my-4">
+                    Profile<br>
+                    <small>It's Nice to Meet You!</small>
+                </h2>
+                <div class="container">
+
+
+                    <div style="position: relative; display: inline-block; width: 30%; height: 100%; margin: 50px;">
+                        <img src="./personal-page-resources/img/Astronaut-512.png" width="100%" height="100%" alt="">
+                    </div>
+                    <div style="position: relative; display: inline-block; width: 30%; height: 100%; margin-left: 50px;">
+                        <hr>
+                        <h5><b style="margin-right: 50px;">Username:</b> {{userData.username}}</h5>
+                        <hr>
+                        <h5><b style="margin-right: 90px;">Email:</b> {{userData.email}}</h5>
+                        <hr>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="stats" style="padding-top: 100px;">
+
+                <!-- Team Members Row -->
+                <div class="row">
+                    <div class="col-lg-12" style="margin-bottom: 50px;">
+                        <h2 class="my-4">
+                            Stats <br>
+                            <small>So, what you have reached for today?</small>
+                        </h2>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 text-center mb-4">
+                        <div class="rounded-circle img-fluid d-block mx-auto" style="width: 200px; height: 200px; background-color: lightseagreen;">
+                            <h5 style="width: 200xp; height: 200px; padding-top: 33%;  padding-left: 0px; text-align: center;">
+                                {{userLevel.experienceIs}}
+                                <hr> {{userLevel.experienceLeft}}
+                            </h5>
+                        </div>
+                        <br>
+                        <h3>
+                            {{userLevel.level}} <br>
+                            <small>Level</small>
+                        </h3>
+                        <br>
+                        <p>What does this stats to? Keep it short! This is also a great spot for social links!</p>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 text-center mb-4">
+                        <div class="rounded-circle img-fluid d-block mx-auto" style="width: 200px; height: 200px; background-color: lightseagreen;">
+                            <h5 style="width: 200xp; height: 200px; padding-top: 33%;  padding-left: 0px; text-align: center;">
+                                0
+                                <hr> 0
+                            </h5>
+                        </div>
+                        <br>
+                        <h3>
+                            {{userData.completedMissionsNumber}} <br>
+                            <small>Missions</small>
+                        </h3>
+                        <br>
+                        <p>What does this stats to? Keep it short! This is also a great spot for social links!</p>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 text-center mb-4">
+
+                        <div class="rounded-circle img-fluid d-block mx-auto" style="width: 200px; height: 200px; background-color: lightseagreen;">
+                            <h5 style="width: 200xp; height: 200px; padding-top: 33%;  padding-left: 0px; text-align: center;">
+                                0
+                                <hr> 0
+                            </h5>
+                        </div>
+                        <br>
+                        <h3>
+                            {{userData.shipsNumber}} <br>
+                            <small>Ships</small>
+                        </h3>
+                        <br>
+                        <p>What does this stats to? Keep it short! This is also a great spot for social links!</p>
+                    </div>
+                    <!--<div class="col-lg-4 col-sm-6 text-center mb-4">
+                        <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
+                        <h3>John Smith
+                            <small>Job Title</small>
+                        </h3>
+                        <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 text-center mb-4">
+                        <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
+                        <h3>John Smith
+                            <small>Job Title</small>
+                        </h3>
+                        <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 text-center mb-4">
+                        <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/200x200" alt="">
+                        <h3>John Smith
+                            <small>Job Title</small>
+                        </h3>
+                        <p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+                    </div>-->
+                </div>
+
+            </section>
         </div>
         <!-- /.container -->
-    </footer>
+
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+            </div>
+            <!-- /.container -->
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                userData: {
+                    username: '',
+                    email: '',
+                    experience: 1,
+                    completedMissionsNumber: 0,
+                    shipsNumber: 0
+                },
+                defaultUserData: {
+                    username: '[username]',
+                    email: '[email]',
+                    experience: 1,
+                    completedMissionsNumber: 0,
+                    shipsNumber: 0
+                }
+            },
+
+            computed: {
+                userLevel() {
+                    if (this.userData.experience == null || this.userData.experience == undefined) {
+                        return {
+                            level: -1,
+                            experienceIs: -1,
+                            experienceLeft: -1
+                        };
+                    }
+
+                    let exp = this.userData.experience;
+                    let expCutted = (exp - (exp % 1000)) / 1000;
+
+                    if (expCutted < 1) {
+                        return {
+                            level: 0,
+                            experienceIs: exp,
+                            experienceLeft: 1000 - exp
+                        };
+                    }
+
+                    let buf = 1;
+                    let counter;
+                    while (buf < expCutted) {
+                        buf = buf >> 1;
+                        counter++;
+                    }
+                    return {
+                        level: counter,
+                        experienceIs: 1000 - (buf * 1000 - exp),
+                        experienceLeft: buf * 1000 - exp
+                    };
+                },
+                experienceLeft() {
+                    if (this.userData.experience == null || this.userData.experience == undefined) {
+                        return -1;
+                    }
+
+                    let exp = this.userData.experience;
+                    let expCutted = (exp - (exp % 1000)) / 1000;
+
+                    if (expCutted < 1) {
+                        return exp % 1000;
+                    }
+
+                    let buf = 1;
+                    let counter;
+                    while (buf < expCutted) {
+                        buf = buf >> 1;
+                        counter++;
+                    }
+                    return exp - buf * 1000;
+                }
+            },
+
+            methods: {
+                requestUserData() {
+                    this.$http.get('/private/personal-room/user-data').then(
+                        (success) => {
+                            alert(
+                                'Successfully loaded personal data! :)\n\n' +
+                                JSON.stringify(success.body)
+                            );
+                            this.userData.username = success.body.user.username;
+                            this.userData.email = success.body.user.userExtension.email;
+                            this.userData.experience = success.body.experience;
+                            this.userData.completedMissionsNumber = success.body.completedMissionsNumber;
+                            this.userData.shipsNumber = success.body.shipsNumber;
+                        },
+                        (fail) => {
+                            alert('Failed to load personal data! :(');
+                            this.userData = this.defaultUserData;
+                        }
+                    );
+                }
+            },
+
+            mounted() {
+                alert('mounted!');
+                this.requestUserData();
+            }
+        });
+    </script>
+
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
     <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Plugin JavaScript -->
+    <script src="../common-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="./personal-page-resources/js/scrolling-nav.js"></script>
 
 </body>
 

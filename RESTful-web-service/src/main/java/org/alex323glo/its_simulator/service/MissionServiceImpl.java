@@ -253,6 +253,8 @@ public class MissionServiceImpl implements MissionService {
 
         storedMission.get().setMissionStatus(MissionStatus.COMPLETED);
         storedMission.get().setFinishTime(LocalDateTime.now());
+        storedMission.get().getUserGameProfile().setCompletedMissionsNumber(
+                storedMission.get().getUserGameProfile().getCompletedMissionsNumber() + 1);
 //        missionRepository.flush();
 
         LOGGER.info("Successfully completed Mission by User's username and Mission instance.");

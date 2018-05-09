@@ -45,6 +45,7 @@ public class PlanetServiceImpl implements PlanetService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public Planet createPlanet(String planetName, Long positionX, Long positionY) throws AppException {
         LOGGER.info("Trying to create new Planet...");
@@ -129,6 +130,7 @@ public class PlanetServiceImpl implements PlanetService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public void deleteAllPlanets() throws AppException {
         LOGGER.info("Trying to delete all Planets...");

@@ -60,6 +60,7 @@ public class PersonalRoomControllerTest {
     public void sendUserData() throws Exception {
         UserGameProfile userGameProfile = CircularityResolver
                 .resolveLazyGameProfile(userService.findUserGameProfile(TEST_USERNAME));
+        userGameProfile.getUser().setPassword(null);
 
         String userGameProfileJSON = new JacksonJsonProvider().toJson(userGameProfile);
 

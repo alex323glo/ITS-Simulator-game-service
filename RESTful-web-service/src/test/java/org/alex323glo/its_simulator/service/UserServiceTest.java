@@ -60,10 +60,16 @@ public class UserServiceTest {
         UserGameProfile userGameProfile = UserGameProfile.builder()
                 .missions(new ArrayList<>())
                 .ships(new ArrayList<>())
+                .experience(0L)
+                .completedMissionsNumber(0)
+                .shipsNumber(0)
                 .build();
         UserGameProfile anotherUserGameProfile = UserGameProfile.builder()
                 .missions(new ArrayList<>())
                 .ships(new ArrayList<>())
+                .experience(0L)
+                .completedMissionsNumber(0)
+                .shipsNumber(0)
                 .build();
         User user = User.builder()
                 .username(TEST_USERNAME)

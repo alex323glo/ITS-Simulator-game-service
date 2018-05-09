@@ -52,20 +52,13 @@
                             <div style="width: 10px;"></div>
                         </li>
 
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
                         <li class="nav-item" v-if="!isAuthenticated">
-                            <!--
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AuthorizationModal">Log in</button>
-                            -->
                             <a class="btn btn-primary" href="./login.html">Log in</a>
-                        </li>
-                        <li class="nav-item" v-if="!isAuthenticated">
-                            <div style="width: 10px;"></div>
-                        </li>
-                        <li class="nav-item" v-if="!isAuthenticated">
-                            <!--
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#RegistrationModal">Sign up</button>
-                            -->
-                            <a class="btn btn-success" href="./login.html">Sign up</a>
                         </li>
 
                         <li class="nav-item" v-if="isAuthenticated">
@@ -74,13 +67,25 @@
                                 <img src="./welcome-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
                             </a>
                         </li>
-                        <li class="nav-item" v-if="isAuthenticated">
-                            <div style="width: 10px;"></div>
+
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
                         </li>
+
+                        <li class="nav-item" v-if="!isAuthenticated">
+                            <a class="btn btn-success" href="./login.html">Sign up</a>
+                        </li>
+
                         <li class="nav-item" v-if="isAuthenticated">
                             <form action="/logout" method="POST">
                                 <button type="submit" class="btn btn-danger">Log out</button>
                             </form>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
                         </li>
                     </ul>
                 </div>
@@ -158,16 +163,6 @@
         </footer>
 
     </div>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="./common-resources/vendor/jquery/jquery.min.js"></script>
-    <script src="./common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="./common-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom JavaScript for this theme -->
-    <script src="./welcome-page-resources/js/scrolling-nav.js"></script>
 
 
 
@@ -267,6 +262,19 @@
             }
         });
     </script>
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="./common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="./common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="./common-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="./welcome-page-resources/js/scrolling-nav.js"></script>
+
+
 
 </body>
 

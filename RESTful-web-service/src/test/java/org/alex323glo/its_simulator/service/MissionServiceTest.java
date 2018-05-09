@@ -110,6 +110,9 @@ public class MissionServiceTest {
                         .user(testUser)
                         .ships(new ArrayList<>())
                         .missions(new ArrayList<>())
+                        .experience(0L)
+                        .completedMissionsNumber(0)
+                        .shipsNumber(2)
                         .build()
         );
         testMission = Mission.builder()

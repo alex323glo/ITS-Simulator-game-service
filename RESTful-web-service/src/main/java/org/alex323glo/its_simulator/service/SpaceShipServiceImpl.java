@@ -52,6 +52,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public SpaceShip createSpaceShip(String username, String shipName, Double maxCargoCapacity,
                                      Integer level, Double speed) throws AppException {
@@ -75,7 +76,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
             throw exception;
         }
 
-        if (spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(shipName, username) != null) {
+        if (spaceShipRepository.findByNameAndUserGameProfile_User_Username(shipName, username) != null) {
             AppException exception = new AppException("Attempt to save new SpaceShip with duplicate name.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
@@ -90,6 +91,9 @@ public class SpaceShipServiceImpl implements SpaceShipService {
                 .level(level)
                 .speed(speed)
                 .build();
+
+        spaceShip.getUserGameProfile().setShipsNumber(
+                spaceShip.getUserGameProfile().getShipsNumber() + 1);
 
         SpaceShip savedSpaceShip = spaceShipRepository.save(spaceShip);
 
@@ -120,7 +124,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
             throw exception;
         }
 
-        SpaceShip spaceShip = spaceShipRepository.findByNameAndAndUserGameProfile_User_Username(shipName, username);
+        SpaceShip spaceShip = spaceShipRepository.findByNameAndUserGameProfile_User_Username(shipName, username);
 
         if (spaceShip == null) {
             LOGGER.warn("No ship with such name was saved to Data Base.");
@@ -147,6 +151,7 @@ public class SpaceShipServiceImpl implements SpaceShipService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public List<SpaceShip> findAllShips(String username) throws AppException {
         LOGGER.info("Trying to list all SpaceShips by User's username...");
