@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Constructor - ITS Simulator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="./mission-constructor-page-resources/css/bare-page-header-styles.css">
+
+
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-resource@1.5.0/dist/vue-resource.min.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="app">
+
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                    <img src="./mission-constructor-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item">
+                            <a href="./personal.html" class="btn btn-outline-secondary">
+                                    {{userData.username}}
+                                    <img src="./mission-constructor-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                                </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                        <li class="nav-item">
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Log out</button>
+                            </form>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+
+
+                <div class="col-lg-12 text-center">
+                    <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
+                    <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
+
+                </div>
+
+
+                <form action="/private/mission-constructor/construct" method="POST" class="mx-auto" style=" width: 50%;" oninput="payloadOutput.value=parseFloat(payload.value) / 100">
+
+                    <div class="card mx-auto" style="margin: 100px;">
+
+                        <div class="card-header" style="text-align: center;">
+                            Mission construction form
+                        </div>
+
+                        <div class="card-body">
+
+
+                            <div class="form-group">
+                                <label for="startPlanet">Choose start point:</label>
+                                <select class="form-control" id="startPlanet" v-model="formInput.startPlanet">
+                                    <option value=""></option>
+                                    <option :value="planet" v-for="planet in planets" v-if="planet.id != formInput.destinationPlanet.id">"{{planet.name}}"  ( {{planet.positionX}} ; {{planet.positionY}} )</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="destinationPlanet">Choose destination point:</label>
+                                <select class="form-control" id="destinationPlanet" v-model="formInput.destinationPlanet">
+                                        <option value=""></option>
+                                        <option :value="planet" v-for="planet in planets" v-if="planet.id != formInput.startPlanet.id">{{planet.name}}"  ( {{planet.positionX}} ; {{planet.positionY}} )</option>
+                                    </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="spaceShip">Select Space Ship:</label>
+                                <select class="form-control" id="spaceShip" v-model="formInput.spaceShip">
+                                        <option :value="spaceShip" v-for="spaceShip in spaceShips">
+                                            <span>"{{spaceShip.name}}"</span>
+                                            <span>cargo: {{spaceShip.maxCargoCapacity}}</span>  
+                                            <span>level: {{spaceShip.level}}</span>  
+                                            <span>speed: {{spaceShip.speed}}</span>
+                                        </option>
+                                    </select>
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label for="payload">Choose payload:</label>
+                                <input :disabled="disablePayloadRange" class="form-control" id="payload" type="range" value="10.0" min="0.0" :max="formInput.spaceShip.maxCargoCapacity * 100" step="1">
+                                <output id="payloadOutput" for="payload"></output>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="card-footer" style="text-align: center;">
+                            <button class="btn btn-success" @click.prevent="constructMissionPressed">Create mission</button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                userData: {
+                    username: ''
+                },
+
+                defaultUserData: {
+                    username: '[username]'
+                },
+
+                planets: [],
+
+                defaultPlanets: [{
+                    id: 1,
+                    name: 'P-001',
+                    positionX: 150,
+                    positionY: 150
+                }, {
+                    id: 2,
+                    name: 'P-002',
+                    positionX: 300,
+                    positionY: 300
+                }],
+
+                spaceShips: [],
+
+                defaultSpaceShips: [{
+                    id: 1,
+                    name: 'Dragon-1',
+                    maxCargoCapacity: 8.0,
+                    level: 3,
+                    speed: 15.0
+                }, {
+                    id: 2,
+                    name: 'Dragon-2',
+                    maxCargoCapacity: 4.0,
+                    level: 2,
+                    speed: 27.0
+                }],
+
+                formInput: {
+                    startPlanet: {
+                        id: -1,
+                        name: '[start_planet_name]',
+                        positionX: -1,
+                        positionY: -1
+                    },
+                    destinationPlanet: {
+                        id: -2,
+                        name: '[destination_planet_name]',
+                        positionX: -2,
+                        positionY: -2
+                    },
+                    spaceShip: {
+                        id: -1,
+                        name: '[ship_name]',
+                        maxCargoCapacity: 100.0,
+                        level: -1,
+                        speed: 0.0
+                    },
+                    payload: 10.0
+                }
+            },
+
+            computed: {
+                disablePayloadRange() {
+                    return (this.formInput.spaceShip.id < 0) ? true : false;
+                }
+            },
+
+            methods: {
+                requestUsername() {
+                    this.$http.get('/get-authenticated-username').then(
+                        (success) => {
+                            console.log('Successfully loaded username! :)');
+                            this.userData.username = success.bodyText;
+                        },
+                        (fail) => {
+                            console.log('Failed to load username! :(');
+                            this.userData = this.defaultUserData;
+                        }
+                    );
+                },
+                requestPlanets() {
+                    this.$http.get('/private/mission-constructor/planet-list').then(
+                        (success) => {
+                            console.log('Successfully loaded planets! :)');
+                            this.planets = success.body;
+                        },
+                        (fail) => {
+                            console.log('Failed to load planets! :(');
+                            this.planets = this.defaultPlanets;
+                        }
+                    );
+                },
+                requestSpaceShips() {
+                    this.$http.get('/private/mission-constructor/free-ship-list').then(
+                        (success) => {
+                            console.log('Successfully loaded Space Ships! :)');
+                            this.spaceShips = success.body;
+                        },
+                        (fail) => {
+                            console.log('Failed to load Space Ships! :(');
+                            this.spaceShips = this.defaultSpaceShips;
+                        }
+                    );
+                },
+
+                constructMissionPressed() {
+                    alert('"Create mission" button was pressed!\n\n' +
+                        'startPlanet: ' + this.formInput.startPlanet + '\n' +
+                        'destinationPlanet: ' + this.formInput.destinationPlanet + '\n' +
+                        'spaceShip: ' + this.formInput.spaceShip + '\n' +
+                        'payload: ' + this.formInput.payload);
+                }
+            },
+
+            mounted() {
+                this.requestUsername();
+                this.requestPlanets();
+                this.requestSpaceShips();
+            }
+        });
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
