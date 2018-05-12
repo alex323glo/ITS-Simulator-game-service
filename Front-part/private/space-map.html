@@ -13,86 +13,369 @@
     <!-- Bootstrap core CSS -->
     <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Vue.js -->
+    <script src="../common-resources/vendor/vue/vue.js"></script>
+    <script src="../common-resources/vendor/vue-resource/vue-resource.min.js"></script>
+
+    <!-- DragScroll library: -->
+    <script src="./space-map-page-resources/js/dragscroll.js"></script>
+
     <!-- Custom styles for this template -->
     <style>
         body {
-            padding-top: 54px;
+            padding-bottom: 54px;
+            background-color: rgb(0, 0, 25);
+            overflow: scroll;
+            cursor: grab;
+            cursor: -o-grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+        
+         ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
         
         @media (min-width: 992px) {
             body {
-                padding-top: 56px;
+                padding-bottom: 56px;
             }
         }
     </style>
 
 </head>
 
-<body>
+<body class="dragscroll">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
-                <img src="./space-map-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <div id="app" style="width: 100%; height: 100%;" @mousewheel.prevent="mouseWheelScroll" @hold="refreshWindow" @drag="refreshWindow" @click="refreshWindow">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                    <img src="./space-map-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
           </button>
 
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
 
-                    <li class="nav-item">
-                        <a href="./mission-management.html" class="btn btn-outline-success">
+                        <li class="nav-item">
+                            <a href="./mission-management.html" class="btn btn-outline-success">
                         Back to management
                       </a>
-                    </li>
+                        </li>
 
-                    <li class="nav-item">
-                        <div style="width: 50px; height: 20px;"></div>
-                    </li>
+                        <li class="nav-item">
+                            <div style="width: 50px; height: 20px;"></div>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="./personal.html" class="btn btn-outline-secondary">
+                        <li class="nav-item">
+                            <a href="./personal.html" class="btn btn-outline-secondary">
                         {{userData.username}}
                         <img src="./space-map-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
                       </a>
-                    </li>
+                        </li>
 
-                    <li class="nav-item">
-                        <div style="width: 10px; height: 10px;"></div>
-                    </li>
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
 
-                    <li class="nav-item">
-                        <form action="/logout" method="POST">
-                            <button type="submit" class="btn btn-danger">Log out</button>
-                        </form>
-                    </li>
+                        <li class="nav-item">
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Log out</button>
+                            </form>
+                        </li>
 
-                    <li class="nav-item">
-                        <div style="width: 10px; height: 10px;"></div>
-                    </li>
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
 
-                </ul>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="btn-group-vertical" style="position: fixed; top: 10px; right: 30px;">
+            <button class="btn btn-outline-primary btn-lg" @click="zoomPlus">+</button>
+            <button class="btn btn-outline-primary btn-lg" @click="zoomMinus">-</button>
+        </div>
+        <div style="position: fixed; top: 150px; right: 10px;">
+            <button :class="minimapButtonClass" @click="showMinimap">Minimap</button>
+        </div>
+        <div style="position: fixed; top: 200px; right: 25px;">
+            <button :class="planetToolTipButtonClass" @click="showPlanetToolTip">Tips</button>
+        </div>
+
+
+        <div :hidden="isMinimapHidden" style="position: fixed; top: 10px; left: 10px; opacity: 50%; border: 2px solid rgb(65, 65, 255); border-radius: 5px;">
+            <div :style="getMinimapSVGStyle">
+                <svg :viewbox="getMinimapViewbox" :width="spaceMap.width / minimapToSpaceMapSize" :height="spaceMap.height / minimapToSpaceMapSize">
+                  <circle :id="getPlanetCircleId(planet.id)" :cx="planet.positionX / minimapToSpaceMapSize" :cy="planet.positionY / minimapToSpaceMapSize" :r="planet.visual.radius / minimapToSpaceMapSize" :fill="getRGBColor(planet.visual.color)" v-for="planet in planets" @load="onPlanetLoad(planet.id)"/>
+              
+                  <rect :x="minimapRect.x" :y="minimapRect.y" :width="minimapRect.width" :height="minimapRect.height" style="stroke: rgb(134, 134, 255); stroke-width: 1px; fill: none;" ></rect>
+            
+                </svg>
             </div>
         </div>
-    </nav>
 
-    <!-- Page Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
+        <!-- Page Content -->
+        <div class="container">
+
+
+
+            <div class="row">
+                <!--<div class="col-lg-12 text-center">
                 <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
                 <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
                 <ul class="list-unstyled">
                     <li>Bootstrap 4.1.1</li>
                     <li>jQuery 3.3.1</li>
                 </ul>
+            </div>-->
+
+                <div :style="getSVGMapContainerStyle">
+                    <svg id="planet-map-svg" :width="svgSpaceMap.width" :height="svgSpaceMap.height" ondrag="">
+               
+                        
+                        <circle :id="getPlanetCircleId(planet.id)" :cx="planet.positionX" :cy="planet.positionY" :r="planet.visual.radius" :fill="getRGBColor(planet.visual.color)" v-for="planet in planets" @load="onPlanetLoad(planet.id)"  :transform="scaleOnScroll"/>
+                        
+                        <line :hidden="isPlanetToolTipHidden" :x1="(planet.positionX + planet.visual.radius + 10) * zoomIndex" :y1="(planet.positionY + planet.visual.radius + 10) * zoomIndex" :x2="(planet.positionX + planet.visual.radius + 90) * zoomIndex" :y2="(planet.positionY + planet.visual.radius + 90) * zoomIndex" style="stroke: rgba(134, 134, 255, 0.3); stroke-linecap: square; stroke-width: 2px;" v-for="planet in planets"></line>
+                        <text :hidden="isPlanetToolTipHidden" :x="(planet.positionX + planet.visual.radius + 100) * zoomIndex" :y="(planet.positionY + planet.visual.radius + 100) * zoomIndex" v-for="planet in planets" fill="rgb(134, 134, 255)">{{getPlanetToolTip(planet)}}</text>
+                    </svg>
+                </div>
+
+
             </div>
         </div>
+
     </div>
+
+    <script>
+        new Vue({
+
+            el: "#app",
+
+            data: {
+                spaceMap: {
+                    width: 1920,
+                    height: 1080
+                },
+
+                svgSpaceMap: {
+                    width: 1920,
+                    height: 1080
+                },
+
+                minimapToSpaceMapSize: 10,
+
+                zoomIndex: 1,
+                minimapIsHidden: true,
+
+                planetToolTipIsHidden: true,
+
+                minimapRect: {
+                    x: 0,
+                    y: 0,
+                    width: 10,
+                    height: 10
+                },
+
+                userData: {
+                    username: ''
+                },
+                defaultUserData: {
+                    username: '[username]'
+                },
+
+                planets: [
+
+                ],
+
+                defaultPlanets: [{
+                    id: 1,
+                    name: 'P-001',
+                    positionX: 150,
+                    positionY: 300,
+                    visual: {
+                        radius: 10,
+                        color: {
+                            red: 212,
+                            green: 57,
+                            blue: 0
+                        },
+                        circles: 2
+                    }
+                }, {
+                    id: 2,
+                    name: 'P-002',
+                    positionX: 500,
+                    positionY: 500,
+                    visual: {
+                        radius: 20,
+                        color: {
+                            red: 212,
+                            green: 150,
+                            blue: 50
+                        },
+                        circles: 0
+                    }
+                }, {
+                    id: 3,
+                    name: 'P-003',
+                    positionX: 700,
+                    positionY: 200,
+                    visual: {
+                        radius: 15,
+                        color: {
+                            red: 212,
+                            green: 50,
+                            blue: 150
+                        },
+                        circles: 1
+                    }
+                }]
+            },
+
+            computed: {
+                minimapButtonClass() {
+                    return 'btn btn-outline-primary' +
+                        ((this.isMinimapHidden) ? '' : ' active')
+                },
+
+                planetToolTipButtonClass() {
+                    return 'btn btn-outline-primary' +
+                        ((this.isPlanetToolTipHidden) ? '' : ' active')
+                },
+
+                scaleOnScroll() {
+                    return 'scale(' + this.zoomIndex + ')';
+                },
+                isMinimapHidden() {
+                    return this.minimapIsHidden;
+                },
+
+                isPlanetToolTipHidden() {
+                    return this.planetToolTipIsHidden;
+                },
+
+                getSVGMapContainerStyle() {
+                    return 'width:' + this.spaceMap.width + 'px; height: ' + this.spaceMap.height + 'px;';
+                },
+                getMinimapSVGStyle() {
+                    return 'width:' + this.spaceMap.width / this.minimapToSpaceMapSize +
+                        'px; height: ' + this.spaceMap.height / this.minimapToSpaceMapSize + 'px;';
+                },
+                getMinimapViewbox() {
+                    return '0 0 ' + (this.spaceMap.width / this.minimapToSpaceMapSize) +
+                        ' ' + (this.spaceMap.height / this.minimapToSpaceMapSize);
+                },
+
+
+            },
+
+            methods: {
+
+                getPlanetToolTip(planet) {
+                    return '"' + planet.name + '" (' +
+                        'x: ' + planet.positionX +
+                        ', y: ' + planet.positionY + ')';
+                },
+
+                /*bodyScrollX() {
+
+                },
+                bodyScrollY() {
+
+                },*/
+
+                refreshWindow() {
+                    let windowWidth = window.innerWidth;
+                    let windowHeight = window.innerHeight;
+                    let windowX = document.body.scrollLeft;
+                    let windowY = document.body.scrollTop;
+
+                    this.minimapRect = {
+                        x: (window.pageXOffset + windowX) / this.minimapToSpaceMapSize / this.zoomIndex,
+                        y: (window.pageYOffset + windowY) / this.minimapToSpaceMapSize / this.zoomIndex,
+                        width: windowWidth / this.minimapToSpaceMapSize / this.zoomIndex,
+                        height: windowHeight / this.minimapToSpaceMapSize / this.zoomIndex
+                    };
+                },
+
+                zoomPlus() {
+                    this.zoomIndex *= 2;
+                },
+                zoomMinus() {
+                    this.zoomIndex /= 2;
+                },
+
+                mouseWheelScroll(event) {
+                    let k = (1 + event.wheelDelta * 0.001);
+                    this.zoomIndex *= k;
+                    console.log('Zoom index: ' + this.zoomIndex);
+                    //this.minimapRect.x /= k;
+                    //this.minimapRect.y /= k;
+                    this.minimapRect.width /= k;
+                    this.minimapRect.height /= k;
+                    //this.refreshWindow();
+
+                    this.svgSpaceMap.width *= k;
+                    this.svgSpaceMap.height *= k;
+
+                    window.scrollTo(window.scrollX * k, window.scrollY * k);
+                },
+
+                showMinimap() {
+                    this.minimapIsHidden = !this.minimapIsHidden;
+                },
+
+                showPlanetToolTip() {
+                    this.planetToolTipIsHidden = !this.planetToolTipIsHidden;
+                },
+
+                getRGBColor(colorsRGB) {
+                    return 'rgb(' +
+                        colorsRGB.red + ', ' +
+                        colorsRGB.green + ', ' +
+                        colorsRGB.blue + ')';
+                },
+                getPlanetCircleId(planetId) {
+                    return 'planet-circle-' + planetId;
+                },
+
+                requestUsername() {
+                    this.$http.get('/private/personal-room/user-data').then(
+                        (success) => {
+                            this.userData.username = success.body.user.username;
+                            console.log('Successfully loaded username! :)');
+                        },
+                        (fail) => {
+                            // alert('Failed to load personal data! :(');
+                            console.log('Failed to load loaded! :(');
+                            this.userData = this.defaultUserData;
+                        }
+                    );
+                },
+                requestAllPlanets() {
+                    // ...
+
+                    this.planets = this.defaultPlanets;
+                }
+            },
+
+            mounted() {
+                this.requestAllPlanets()
+                this.refreshWindow();
+            }
+
+        });
+    </script>
 
     <!-- Bootstrap core JavaScript -->
     <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
