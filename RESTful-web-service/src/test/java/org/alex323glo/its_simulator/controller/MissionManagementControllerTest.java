@@ -98,9 +98,11 @@ public class MissionManagementControllerTest {
     @WithMockUser(username = TEST_USERNAME)
     public void getMissionsList() throws Exception {
         List<Mission> allMissions = missionService.findAllMissions(TEST_USERNAME);
-        allMissions.forEach(mission -> mission.setUserGameProfile(
-                CircularityResolver.resolveLazyGameProfile(
-                        mission.getUserGameProfile())));
+        allMissions.forEach(mission -> {
+                    mission.setUserGameProfile(null);
+                    mission.getSpaceShip().setUserGameProfile(null);
+                }
+        );
 
         String allMissionsJSON = new JacksonJsonProvider().toJson(allMissions);
 

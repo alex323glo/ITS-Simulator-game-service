@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mission - ITS Simulator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./mission-page-resources/css/the-big-picture.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                <img src="./mission-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a href="./personal.html" class="btn btn-outline-secondary">
+                            {{userData.username}}
+                            <img src="./mission-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <div style="width: 10px; height: 10px;"></div>
+                    </li>
+
+                    <li class="nav-item">
+                        <form action="/logout" method="POST">
+                            <button type="submit" class="btn btn-danger">Log out</button>
+                        </form>
+                    </li>
+
+                    <li class="nav-item">
+                        <div style="width: 10px; height: 10px;"></div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1 class="mt-5">The Big Picture</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt voluptates rerum eveniet sapiente repellat esse, doloremque quod recusandae deleniti nostrum assumenda vel beatae sed aut modi nesciunt porro quisquam voluptatem.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

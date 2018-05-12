@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Space Map - ITS Simulator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <style>
+        body {
+            padding-top: 54px;
+        }
+        
+        @media (min-width: 992px) {
+            body {
+                padding-top: 56px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                <img src="./space-map-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a href="./mission-management.html" class="btn btn-outline-success">
+                        Back to management
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <div style="width: 50px; height: 20px;"></div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="./personal.html" class="btn btn-outline-secondary">
+                        {{userData.username}}
+                        <img src="./space-map-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <div style="width: 10px; height: 10px;"></div>
+                    </li>
+
+                    <li class="nav-item">
+                        <form action="/logout" method="POST">
+                            <button type="submit" class="btn btn-danger">Log out</button>
+                        </form>
+                    </li>
+
+                    <li class="nav-item">
+                        <div style="width: 10px; height: 10px;"></div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
+                <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
+                <ul class="list-unstyled">
+                    <li>Bootstrap 4.1.1</li>
+                    <li>jQuery 3.3.1</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

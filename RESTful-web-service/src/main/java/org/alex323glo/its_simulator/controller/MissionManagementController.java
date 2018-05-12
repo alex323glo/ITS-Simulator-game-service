@@ -54,9 +54,11 @@ public class MissionManagementController {
 
         try {
             List<Mission> allMissions = missionService.findAllMissions(principal.getName());
-            allMissions.forEach(mission -> mission.setUserGameProfile(
-                    CircularityResolver.resolveLazyGameProfile(
-                            mission.getUserGameProfile())));
+            allMissions.forEach(mission ->  {
+                mission.setUserGameProfile(null);
+                mission.getSpaceShip().setUserGameProfile(null);
+            });
+
 
             LOGGER.info("Successfully served '/private/mission-management/missions' endpoint " +
                     "(send List of Missions to '" + principal.getName() + "' user).");

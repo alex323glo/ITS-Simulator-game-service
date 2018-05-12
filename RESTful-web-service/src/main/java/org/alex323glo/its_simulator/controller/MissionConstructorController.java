@@ -103,9 +103,7 @@ public class MissionConstructorController {
             List<SpaceShip> freeSpaceShipList = spaceShipService.findAllFreeShips(principal.getName());
 
             freeSpaceShipList.forEach(ship -> {
-                ship.setUserGameProfile(
-                        CircularityResolver.resolveLazyGameProfile(
-                                ship.getUserGameProfile()));
+                ship.setUserGameProfile(null);
             });
 
             LOGGER.info("Successfully served '/private/mission-constructor/planet-list' endpoint " +

@@ -18,12 +18,14 @@
 
 
     <!-- Vue.js -->
-    <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/vue-resource@1.5.0/dist/vue-resource.min.js"></script>
+    <script src="../common-resources/vendor/vue/vue.js"></script>
+    <script src="../common-resources/vendor/vue-resource/vue-resource.min.js"></script>
 
 
+    <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-->
 
 </head>
 
@@ -86,13 +88,13 @@
                 </div>
 
 
-                <form id="mission-form" action="/private/mission-constructor/construct" method="POST" class="mx-auto" style="width: 50%;" oninput="payloadOutput.value=parseFloat(payload.value) / 100">
+                <form id="mission-form" action="/private/mission-constructor/construct" method="POST" class="mx-auto" oninput="payloadOutput.value=parseFloat(payload.value) / 100">
 
                     <!-- Form input: -->
-                    <div class="card" style="margin: 100px; display: inline-block;">
+                    <div class="card" style="margin: 50px; display: inline-flex;">
 
                         <div class="card-header" style="text-align: center;">
-                            Mission construction form
+                            <h3>Mission construction form</h3>
                         </div>
 
                         <div class="card-body">
@@ -140,49 +142,65 @@
                         </div>
 
                         <div class="card-footer" style="text-align: center;">
-                            <button :disabled="disableRequestButton" class="btn btn-success" @click="constructMissionPressed">Create mission</button>
+                            <button :disabled="disableRequestButton" class="btn btn-success" @click.prevent="constructMissionPressed">
+                                Create mission
+                            </button>
+                            <button class="btn btn-outline-success" @click.prevent="showMissionCard">
+                                {{getMissionCardHideButtonText}}
+                            </button>
                         </div>
 
                     </div>
+
+
+
+                    <!-- Form output: -->
+
+
+
+                    <div class="card" :style="getMissionCardStyle">
+                        <div class="card-header" style="text-align: center;">
+                            <h3>Mission</h3>
+                        </div>
+                        <div class="card-body" style="height: auto;">
+                            <h6>Start planet: <small>{{displayStartPlanetInput.name}}</small></h6>
+
+                            <h6>Destination planet: <small>{{displayDestinationPlanetInput.name}}</small></h6>
+
+                            <h6>Space Ship: <small>{{displaySpaceShipInput.name}}</small></h6>
+
+                            <h6>Payload: <small>{{displayPayloadInput}}</small></h6>
+
+                            <hr>
+
+                            <h6>Distance: <small>{{displayCalculatedDistance}}</small></h6>
+
+                            <h6>Space Ship level: <small>{{displaySpaceShipInput.level}}</small></h6>
+
+                            <h6>Space Ship speed: <small>{{displaySpaceShipInput.speed}}</small></h6>
+
+                            <hr>
+
+                            <h5 style="display: inline-block;">Time: </h5>
+                            <button :disabled="disableSeeTimeButton" class="btn btn-warning btn-block" style="display: inline-block; width: 300px;" @click.prevent="requestMissionAnalise">
+                                <span v-if="missionAnalise.duration >= 3600">{{(missionAnalise.duration - missionAnalise.duration % 3600) / 3600}} hours </span>
+                                <span v-if="missionAnalise.duration >= 60">{{(missionAnalise.duration - missionAnalise.duration % 60) / 60}} minutes </span>
+                                <span v-if="missionAnalise.duration >= 0">{{missionAnalise.duration % 60}} seconds</span><br>
+                                <span v-if="missionAnalise.duration < 0">Click to see time</span>
+                            </button>
+
+                        </div>
+                    </div>
+
+
 
 
                 </form>
 
 
-                <!-- Form output: -->
-                <div class="card mx-auto" style="margin: 100px; display: inline-block;">
-                    <div class="card-header" style="text-align: center;">
-                        <h3>Mission</h3>
-                    </div>
-                    <div class="card-body">
-                        <h6>Start planet: <small>{{displayStartPlanetInput.name}}</small></h6>
 
-                        <h6>Destination planet: <small>{{displayDestinationPlanetInput.name}}</small></h6>
 
-                        <h6>Space Ship: <small>{{displaySpaceShipInput.name}}</small></h6>
 
-                        <h6>Payload: <small>{{displayPayloadInput}}</small></h6>
-
-                        <hr>
-
-                        <h6>Distance: <small>{{displayCalculatedDistance}}</small></h6>
-
-                        <h6>Space Ship level: <small>{{displaySpaceShipInput.level}}</small></h6>
-
-                        <h6>Space Ship speed: <small>{{displaySpaceShipInput.speed}}</small></h6>
-
-                        <hr>
-
-                        <h6 style="display: inline-block;">Time: </h6>
-                        <div :class="disableSeeTimeButton" style="display: inline-block;">
-                            <span v-if="missionAnalise.duration >= 3600">{{missionAnalise.duration / 3600}} hours </span>
-                            <span v-if="missionAnalise.duration >= 60">{{missionAnalise.duration / 60}} minutes </span>
-                            <span v-if="missionAnalise.duration >= 0">{{missionAnalise.duration % 60}} seconds</span>
-                            <span v-if="missionAnalise.duration < 0">Click to see</span>
-                        </div>
-
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -195,6 +213,9 @@
             el: '#app',
 
             data: {
+
+                missionCardIsVisivle: false,
+
                 userData: {
                     username: ''
                 },
@@ -259,11 +280,21 @@
                 missionAnalise: {},
 
                 defaultMissionAnalise: {
-                    duration: -1
+                    duration: 3777
                 }
             },
 
             computed: {
+
+                getMissionCardStyle() {
+                    return 'margin: 50px; display: inline-flex;' +
+                        ((this.missionCardIsVisivle) ? '' : ' visibility: hidden;');
+                },
+
+                getMissionCardHideButtonText() {
+                    return ((this.missionCardIsVisivle) ? 'Hide' : 'Show') + ' Mission Preview';
+                },
+
                 properPayload() {
                     return this.formInput.payload / 100;
                 },
@@ -291,8 +322,7 @@
                 },
 
                 disableSeeTimeButton() {
-                    return 'btn btn-warning btn-block' +
-                        (this.disableRequestButton ? 'disabled' : '');
+                    return this.disableRequestButton;
                 },
 
 
@@ -320,6 +350,11 @@
             },
 
             methods: {
+
+                showMissionCard() {
+                    this.missionCardIsVisivle = !this.missionCardIsVisivle;
+                },
+
                 onInputsChanged() {
                     this.missionAnalise = this.defaultMissionAnalise;
                 },
@@ -364,17 +399,20 @@
                     );
                 },
 
-                analizeMission() {
+                requestMissionAnalise() {
                     alert('"Analize mission" button was pressed!\n\n' +
-                        'startPlanet: ' + this.formInput.startPlanet + '\n' +
-                        'destinationPlanet: ' + this.formInput.destinationPlanet + '\n' +
-                        'spaceShip: ' + this.formInput.spa);
+                        'startPlanet: ' + JSON.stringify(this.formInput.startPlanet) + '\n' +
+                        'destinationPlanet: ' + JSON.stringify(this.formInput.destinationPlanet) + '\n' +
+                        'spaceShip: ' + JSON.stringify(this.formInput.spaceShip) + '\n' +
+                        'payload: ' + this.formInput.payload);
 
-                    this.$http.post('/private/mission-constructor/analize', {
-                        start: this.formInput.startPlanet.name,
-                        destination: this.formInput.destinationPlanet.name,
-                        spaceShip: this.formInput.spaceShip.name,
-                        payload: this.properPayload
+                    this.$http.get('/private/mission-constructor/analyze', {
+                        params: {
+                            start: this.formInput.startPlanet.name,
+                            destination: this.formInput.destinationPlanet.name,
+                            ship: this.formInput.spaceShip.name,
+                            payload: this.properPayload
+                        }
                     }).then(
                         (success) => {
                             console.log('Successfully analized mission! :)');
@@ -383,47 +421,59 @@
                         },
                         (fail) => {
                             console.log('Failed to analize Mission! :(');
+                            alert("ERROR! Can't get Mission Analise!");
                         }
                     );
                 },
 
                 /*
                 
-                @RequestParam(name = "start") String startPlanetName,
-                @RequestParam(name = "destination") String destinationPlanetName,
-                @RequestParam(name = "ship") String spaceShipName,
-                @RequestParam(name = "payload") String payload,
+                                @RequestParam(name = "start") String startPlanetName,
+                                @RequestParam(name = "destination") String destinationPlanetName,
+                                @RequestParam(name = "ship") String spaceShipName,
+                                @RequestParam(name = "payload") String payload,
 
-                */
+                                */
                 constructMissionPressed() {
                     alert('"Create mission" button was pressed!\n\n' +
-                        'startPlanet: ' + this.formInput.startPlanet + '\n' +
-                        'destinationPlanet: ' + this.formInput.destinationPlanet + '\n' +
-                        'spaceShip: ' + this.formInput.spaceShip + '\n' +
+                        'startPlanet: ' + JSON.stringify(this.formInput.startPlanet.name) + '\n' +
+                        'destinationPlanet: ' + JSON.stringify(this.formInput.destinationPlanet) + '\n' +
+                        'spaceShip: ' + JSON.stringify(this.formInput.spaceShip) + '\n' +
                         'payload: ' + this.properPayload);
 
-                    this.$http.post('/private/mission-constructor/construct', {
+                    let postBody = {
                         start: this.formInput.startPlanet.name,
                         destination: this.formInput.destinationPlanet.name,
-                        spaceShip: this.formInput.spaceShip.name,
+                        ship: this.formInput.spaceShip.name,
                         payload: this.properPayload
+                    };
+
+                    this.$http.post('/private/mission-constructor/construct', {}, {
+                        params: postBody
                     }).then(
                         (success) => {
                             console.log('Successfully constructed mission! :)');
                             console.log('Mission: \n' + JSON.stringify(success.body));
                             this.constructedMission = success.body;
 
-                            confirm('Congrutulations!\n Your new Mission was constructed.\n');
+                            if (confirm('Congrutulations!\n Your new Mission was constructed.\n')) {
+                                window.location.replace('./mission.html');
+                            } else {
+                                window.location.replace("./mission-management.html");
+                            }
                         },
                         (fail) => {
-                            console.log('Failed to analize Mission! :(');
+                            console.log('Failed to construct new Mission! :(');
+                            alert("ERROR! Can't construct mission!");
+                            alert('Fail response: \n' + JSON.stringify(fail));
+                            // window.location.reload();
                         }
                     );
                 }
             },
 
             mounted() {
-                this.missionAnalise = this.defaultMissionAnalise;
+                //this.missionAnalise = this.defaultMissionAnalise;
                 this.requestUsername();
                 this.requestPlanets();
                 this.requestSpaceShips();

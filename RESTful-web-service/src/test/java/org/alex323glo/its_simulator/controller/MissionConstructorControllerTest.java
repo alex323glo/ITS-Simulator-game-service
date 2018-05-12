@@ -130,9 +130,7 @@ public class MissionConstructorControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(result -> {
                     List<SpaceShip> freeSpaceShipList = spaceShipService.findAllFreeShips(TEST_USERNAME);
-                    freeSpaceShipList.forEach(ship -> ship.setUserGameProfile(
-                            CircularityResolver.resolveLazyGameProfile(
-                                    ship.getUserGameProfile())));
+                    freeSpaceShipList.forEach(ship -> ship.setUserGameProfile(null));
 
                     String freeSpaceShipListJSON = new JacksonJsonProvider().toJson(freeSpaceShipList);
                     assertEquals(freeSpaceShipListJSON, result.getResponse().getContentAsString());

@@ -19,8 +19,8 @@
     <link href="./mission-management-page-resources/css/scrolling-nav.css" rel="stylesheet">
 
     <!-- Vue.js -->
-    <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/vue-resource@1.5.0/dist/vue-resource.min.js"></script>
+    <script src="../common-resources/vendor/vue/vue.js"></script>
+    <script src="../common-resources/vendor/vue-resource/vue-resource.min.js"></script>
 
 </head>
 
@@ -36,35 +36,11 @@
                     <img src="./mission-management-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-
-                        <!--<li class="nav-item active">
-                        <a class="nav-link" href="#">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>-->
-
-
-                        <!--<li class="nav-item active">
-                            <a class="nav-link js-scroll-trigger" href="#">{{userData.username}}
-                            <span class="sr-only">(current)</span>
-                            <img src="./personal-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
-                        </a>
-                        </li>-->
 
                         <li class="nav-item">
                             <a href="./personal.html" class="btn btn-outline-secondary">
@@ -141,19 +117,18 @@
                                 <h3>Mission #{{mission.id}}</h3>
                                 <br>
                                 <h5>
-                                    <a :class="missionStatusButtonClass(mission.missionStatus)" href="">
+                                    <a :class="missionStatusButtonClass(mission.missionStatus)" :href="getRefToMission(mission.id)">
                                     {{mission.missionStatus}}
                                 </a>
                                 </h5>
                                 <br>
 
-                                <h6>Started from: <b>"{{mission.startPoint.planetName}}"</b></h6>
-                                <h6>Is going to: <b>"{{mission.destinationPoint.planetName}}"</b></h6>
+                                <h6>Started from: <b>"{{mission.startPoint.name}}"</b></h6>
+                                <h6>Is going to: <b>"{{mission.destinationPoint.name}}"</b></h6>
                                 <h6>Carried by: <b>"{{mission.spaceShip.name}}"</b></h6>
 
-
                                 <br>
-                                <a class="btn btn-outline-primary btn-lg" href="">To mission</a>
+                                <a class="btn btn-outline-primary btn-lg" :href="getRefToMission(mission.id)">To mission</a>
                             </div>
                         </div>
                         <!-- /.row -->
@@ -541,6 +516,10 @@
                         default:
                             return 'btn btn-secondary';
                     }
+                },
+
+                getRefToMission(missionId) {
+                    return './mission.html#' + missionId;
                 }
             },
 
