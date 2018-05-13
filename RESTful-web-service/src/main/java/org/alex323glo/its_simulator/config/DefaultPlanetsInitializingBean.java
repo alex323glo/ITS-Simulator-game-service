@@ -34,8 +34,12 @@ public class DefaultPlanetsInitializingBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         try {
-            planetService.createPlanet("P-001", 100L, 100L);
-            planetService.createPlanet("P-002", 250L, 250L);
+            planetService.createPlanet("P-001", 250L, 400L,
+                    10, "#d43900", 2);
+            planetService.createPlanet("P-002", 600L, 600L,
+                    20, "#62d432", 1);
+            planetService.createPlanet("Earth", 800L, 300L,
+                    15, "#32cbd4", 0);
 
             LOGGER.info("Successfully initialized (prepared) System after start (registered Default Planets).");
         } catch (PlanetDuplicationException pde) {

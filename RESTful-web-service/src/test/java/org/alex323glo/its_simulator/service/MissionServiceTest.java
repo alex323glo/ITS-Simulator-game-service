@@ -44,10 +44,16 @@ public class MissionServiceTest {
     private static final String TEST_START_PLANET_NAME = "P-001";
     private static final Long TEST_START_PLANET_POSITION_X = 50L;
     private static final Long TEST_START_PLANET_POSITION_Y = 50L;
+    private static final Integer TEST_START_PLANET_RADIUS = 10;
+    private static final String TEST_START_PLANET_COLOR = "#112233";
+    private static final Integer TEST_START_PLANET_CIRCLES_NUMBER = 1;
 
     private static final String TEST_DESTINATION_PLANET_NAME = "P-002";
     private static final Long TEST_DESTINATION_PLANET_POSITION_X = 300L;
     private static final Long TEST_DESTINATION_PLANET_POSITION_Y = 300L;
+    private static final Integer TEST_DESTINATION_PLANET_RADIUS = 20;
+    private static final String TEST_DESTINATION_PLANET_COLOR = "#445566";
+    private static final Integer TEST_DESTINATION_PLANET_CIRCLES_NUMBER = 2;
 
     private static final Long TEST_MISSION_DURATION_SECONDS = 30L;
     private static final Double TEST_MISSION_PAYLOAD = 0.5;
@@ -86,12 +92,18 @@ public class MissionServiceTest {
                         .name(TEST_START_PLANET_NAME)
                         .positionX(TEST_START_PLANET_POSITION_X)
                         .positionY(TEST_START_PLANET_POSITION_Y)
+                        .radius(TEST_START_PLANET_RADIUS)
+                        .color(TEST_START_PLANET_COLOR)
+                        .circles(TEST_START_PLANET_CIRCLES_NUMBER)
                         .build());
         testDestinationPlanet = planetRepository.save(
                 Planet.builder()
                         .name(TEST_DESTINATION_PLANET_NAME)
                         .positionX(TEST_DESTINATION_PLANET_POSITION_X)
                         .positionY(TEST_DESTINATION_PLANET_POSITION_Y)
+                        .radius(TEST_DESTINATION_PLANET_RADIUS)
+                        .color(TEST_START_PLANET_COLOR)
+                        .circles(TEST_DESTINATION_PLANET_CIRCLES_NUMBER)
                         .build());
 
         testUser = User.builder()

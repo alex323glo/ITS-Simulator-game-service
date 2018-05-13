@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
+
 /**
  * Validator util class.
  *
@@ -93,6 +95,46 @@ public class Validator {
         }
         if (coordinate < 0) {
             throw new ValidationException("Planet coordinate validation failed (coordinate is negative)");
+        }
+        return this;
+    }
+
+    public Validator validatePlanetRadius(Integer radius) throws ValidationException {
+        if (radius == null) {
+            throw new ValidationException("Planet radius validation failed (radius is null)");
+        }
+        if (radius < 0) {
+            throw new ValidationException("Planet radius validation failed (radius is negative)");
+        }
+        return this;
+    }
+
+    public Validator validatePlanetCirclesNumber(Integer circlesNumber) throws ValidationException {
+        if (circlesNumber == null) {
+            throw new ValidationException("Planet circles number validation failed (circles number is null)");
+        }
+        if (circlesNumber < 0) {
+            throw new ValidationException("Planet circles number validation failed (circles number is negative)");
+        }
+        return this;
+    }
+
+    public Validator validateHexColorString(String hexColorString) throws ValidationException {
+        if (hexColorString == null) {
+            throw new ValidationException("Hex color string validation failed (string is null).");
+        }
+        if (hexColorString.length() != 7) {
+            throw new ValidationException("Hex color string validation failed (string's length is not equal to 7).");
+        }
+        if ('#' != hexColorString.charAt(0)) {
+            throw new ValidationException("Hex color string validation failed (string's first char is not '#').");
+        }
+
+        try {
+            Color decodedColor = Color.decode(hexColorString);
+        } catch (NumberFormatException e) {
+            throw new ValidationException(
+                    "Hex color string validation failed (string can't be decoded to Color).", e);
         }
         return this;
     }

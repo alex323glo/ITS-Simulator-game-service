@@ -193,6 +193,8 @@ public class MissionServiceImpl implements MissionService {
             throw exception;
         }
 
+        storedMission.get().getSpaceShip().setSpaceShipStatus(SpaceShipStatus.FREE);
+
         storedMission.get().setMissionStatus(MissionStatus.CANCELED);
         storedMission.get().setFinishTime(LocalDateTime.now());
 //        missionRepository.flush();
@@ -250,6 +252,8 @@ public class MissionServiceImpl implements MissionService {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+
+        storedMission.get().getSpaceShip().setSpaceShipStatus(SpaceShipStatus.FREE);
 
         storedMission.get().setMissionStatus(MissionStatus.COMPLETED);
         storedMission.get().setFinishTime(LocalDateTime.now());
@@ -408,6 +412,8 @@ public class MissionServiceImpl implements MissionService {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+
+        spaceShip.setSpaceShipStatus(SpaceShipStatus.BUSY);
 
         Mission savedMission = missionRepository.save(Mission.builder()
                 .userGameProfile(spaceShip.getUserGameProfile())

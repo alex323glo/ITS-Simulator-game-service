@@ -30,7 +30,6 @@ public class Planet {
    @Column(nullable = false, unique = true)
    private String name;
 
-
    // Additional
 
    @Column(nullable = false)
@@ -39,4 +38,13 @@ public class Planet {
    @Column(nullable = false)
    private Long positionY;
 
+
+   @Column(nullable = false)
+   private Integer radius;
+
+   @Column(nullable = false)
+   private String color;
+
+   @Column(nullable = false)
+   private Integer circles;
 }

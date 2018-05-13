@@ -308,7 +308,7 @@
                     let x2 = this.formInput.destinationPlanet.positionX;
                     let y2 = this.formInput.destinationPlanet.positionY;
 
-                    return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+                    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
                 },
 
                 disablePayloadRange() {
@@ -457,9 +457,9 @@
                             this.constructedMission = success.body;
 
                             if (confirm('Congrutulations!\n Your new Mission was constructed.\n')) {
-                                window.location.replace('./mission.html');
+                                window.location.replace('./mission.html#' + this.constructedMission.id);
                             } else {
-                                window.location.replace("./mission-management.html");
+                                window.location.replace('./mission-management.html');
                             }
                         },
                         (fail) => {
