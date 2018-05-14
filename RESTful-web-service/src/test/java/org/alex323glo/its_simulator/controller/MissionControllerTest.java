@@ -111,9 +111,8 @@ public class MissionControllerTest {
     @Test
     @WithMockUser(username = TEST_USERNAME)
     public void getMission() throws Exception {
-        testMission.setUserGameProfile(
-                CircularityResolver.resolveLazyGameProfile(
-                        testMission.getUserGameProfile()));
+        testMission.setUserGameProfile(null);
+        testMission.getSpaceShip().setUserGameProfile(null);
 
         String testMissionJSON = new JacksonJsonProvider().toJson(testMission);
         mockMvc
@@ -136,9 +135,8 @@ public class MissionControllerTest {
                     Mission mission = missionService.findMission(TEST_USERNAME, testMission.getId());
                     assertEquals(MissionStatus.STARTED, mission.getMissionStatus());
 
-                    mission.setUserGameProfile(
-                            CircularityResolver.resolveLazyGameProfile(
-                                    mission.getUserGameProfile()));
+                    mission.setUserGameProfile(null);
+                    mission.getSpaceShip().setUserGameProfile(null);
 
                     String missionJSON = new JacksonJsonProvider().toJson(mission);
                     assertEquals(missionJSON, result.getResponse().getContentAsString());
@@ -158,9 +156,8 @@ public class MissionControllerTest {
                     Mission mission = missionService.findMission(TEST_USERNAME, testMission.getId());
                     assertEquals(MissionStatus.CANCELED, mission.getMissionStatus());
 
-                    mission.setUserGameProfile(
-                            CircularityResolver.resolveLazyGameProfile(
-                                    mission.getUserGameProfile()));
+                    mission.setUserGameProfile(null);
+                    mission.getSpaceShip().setUserGameProfile(null);
 
                     String missionJSON = new JacksonJsonProvider().toJson(mission);
                     assertEquals(missionJSON, result.getResponse().getContentAsString());

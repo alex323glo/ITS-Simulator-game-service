@@ -90,7 +90,7 @@ public class MissionMetrics {
             return null;
         }
 
-        Double time = distance * (shipSpeed + (shipLevel * shipLevelCoefficient) );
+        Double time = distance / (shipSpeed + (shipLevel * shipLevelCoefficient) );
 
         time *= timeCoefficientSeconds;
 

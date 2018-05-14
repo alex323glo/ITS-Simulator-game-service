@@ -33,7 +33,7 @@ public class SpaceShip {
     @ManyToOne
     private UserGameProfile userGameProfile;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(precision = 3)

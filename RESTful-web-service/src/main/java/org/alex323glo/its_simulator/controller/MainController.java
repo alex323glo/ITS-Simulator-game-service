@@ -1,6 +1,7 @@
 package org.alex323glo.its_simulator.controller;
 
 import org.alex323glo.its_simulator.exception.AppException;
+import org.alex323glo.its_simulator.service.SpaceShipService;
 import org.alex323glo.its_simulator.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +47,12 @@ public class MainController {
 
     private final UserService userService;
 
+    private final SpaceShipService spaceShipService;
+
     @Autowired
-    public MainController(UserService userService) {
+    public MainController(UserService userService, SpaceShipService spaceShipService) {
         this.userService = userService;
+        this.spaceShipService = spaceShipService;
     }
 
     @PostMapping("/register")
@@ -58,7 +62,15 @@ public class MainController {
             @RequestParam("email") String email) {
         LOGGER.info("Serving '/register' endpoint (POST request)...");
         try {
+
             userService.registerUser(username, password, email);
+
+            spaceShipService.createSpaceShip(username, "Dragon-1",
+                    50.0, 1, 30.0);
+
+            spaceShipService.createSpaceShip(username, "Dragon-2",
+                    70.0, 2, 15.0);
+
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create("/login"));
             LOGGER.info("Successfully served '/register' endpoint (user {username: '" +

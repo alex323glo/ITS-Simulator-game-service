@@ -55,7 +55,10 @@ public class CustomLocalDateTimeSerializer extends JsonSerializer<LocalDateTime>
         gen.writeNumberField("year", value.getYear());
         gen.writeNumberField("month", value.getMonthValue());
         gen.writeNumberField("dayOfMonth", value.getDayOfMonth());
-        gen.writeNumberField("hour", value.getMonthValue());
+        gen.writeNumberField("hour", value.getHour());
+        gen.writeNumberField("minute", value.getMinute());
+        gen.writeNumberField("second", value.getSecond());
+        gen.writeNumberField("dayOfYear", value.getDayOfYear());
         gen.writeEndObject();
     }
 }

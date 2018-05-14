@@ -47,12 +47,21 @@
 
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="./mission-management.html" class="btn btn-outline-success">
+                                Back to management
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 50px; height: 20px;"></div>
+                        </li>
 
                         <li class="nav-item">
                             <a href="./personal.html" class="btn btn-outline-secondary">
-                                    {{userData.username}}
-                                    <img src="./mission-constructor-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
-                                </a>
+                                {{userData.username}}
+                                <img src="./mission-constructor-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                            </a>
                         </li>
 
                         <li class="nav-item">
@@ -82,11 +91,15 @@
 
 
                 <div class="col-lg-12 text-center">
-                    <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>
-                    <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-
+                    <a href="">
+                        <img width="256" src="./mission-constructor-page-resources/img/constructor.png" alt="">
+                    </a>
+                    <br><br>
+                    <h1 class="mt-5">Mission Constructor</h1>
+                    <p class="lead">You see your personal mission construction master. Fill fields and create you new mission right now!</p>
                 </div>
 
+                <br><br>
 
                 <form id="mission-form" action="/private/mission-constructor/construct" method="POST" class="mx-auto" oninput="payloadOutput.value=parseFloat(payload.value) / 100">
 
@@ -182,13 +195,14 @@
                             <hr>
 
                             <h5 style="display: inline-block;">Time: </h5>
-                            <button :disabled="disableSeeTimeButton" class="btn btn-warning btn-block" style="display: inline-block; width: 300px;" @click.prevent="requestMissionAnalise">
+                            <button v-if="missionAnalise.duration >= 0" :disabled="disableSeeTimeButton" class="btn btn-warning btn-block" style="display: inline-block; width: 300px;" @click.prevent="requestMissionAnalise">
                                 <span v-if="missionAnalise.duration >= 3600">{{(missionAnalise.duration - missionAnalise.duration % 3600) / 3600}} hours </span>
                                 <span v-if="missionAnalise.duration >= 60">{{(missionAnalise.duration - missionAnalise.duration % 60) / 60}} minutes </span>
                                 <span v-if="missionAnalise.duration >= 0">{{missionAnalise.duration % 60}} seconds</span><br>
-                                <span v-if="missionAnalise.duration < 0">Click to see time</span>
                             </button>
-
+                            <button v-if="missionAnalise.duration < 0" :disabled="disableSeeTimeButton" class="btn btn-warning btn-block" style="display: inline-block; width: 300px;" @click.prevent="requestMissionAnalise">
+                                <span >Click to see time</span>
+                            </button>
                         </div>
                     </div>
 
@@ -280,7 +294,7 @@
                 missionAnalise: {},
 
                 defaultMissionAnalise: {
-                    duration: 3777
+                    duration: -1
                 }
             },
 
@@ -400,11 +414,13 @@
                 },
 
                 requestMissionAnalise() {
+                    /*
                     alert('"Analize mission" button was pressed!\n\n' +
                         'startPlanet: ' + JSON.stringify(this.formInput.startPlanet) + '\n' +
                         'destinationPlanet: ' + JSON.stringify(this.formInput.destinationPlanet) + '\n' +
                         'spaceShip: ' + JSON.stringify(this.formInput.spaceShip) + '\n' +
                         'payload: ' + this.formInput.payload);
+                        */
 
                     this.$http.get('/private/mission-constructor/analyze', {
                         params: {
@@ -435,11 +451,13 @@
 
                                 */
                 constructMissionPressed() {
+                    /*
                     alert('"Create mission" button was pressed!\n\n' +
                         'startPlanet: ' + JSON.stringify(this.formInput.startPlanet.name) + '\n' +
                         'destinationPlanet: ' + JSON.stringify(this.formInput.destinationPlanet) + '\n' +
                         'spaceShip: ' + JSON.stringify(this.formInput.spaceShip) + '\n' +
                         'payload: ' + this.properPayload);
+                        */
 
                     let postBody = {
                         start: this.formInput.startPlanet.name,
@@ -456,7 +474,7 @@
                             console.log('Mission: \n' + JSON.stringify(success.body));
                             this.constructedMission = success.body;
 
-                            if (confirm('Congrutulations!\n Your new Mission was constructed.\n')) {
+                            if (confirm('Congrutulations! \nYour new Mission was constructed. \nPress "OK" to start the mission, or "CANCEL" to return.')) {
                                 window.location.replace('./mission.html#' + this.constructedMission.id);
                             } else {
                                 window.location.replace('./mission-management.html');
@@ -473,7 +491,7 @@
             },
 
             mounted() {
-                //this.missionAnalise = this.defaultMissionAnalise;
+                this.missionAnalise = this.defaultMissionAnalise;
                 this.requestUsername();
                 this.requestPlanets();
                 this.requestSpaceShips();

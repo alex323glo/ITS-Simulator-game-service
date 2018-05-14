@@ -136,7 +136,9 @@ public class MissionServiceImpl implements MissionService {
         }
 
         storedMission.get().setMissionStatus(MissionStatus.STARTED);
+
         storedMission.get().setStartTime(LocalDateTime.now());
+        storedMission.get().setFinishTime(LocalDateTime.now().plusSeconds(storedMission.get().getDuration()));
 //        missionRepository.flush();
 
         LOGGER.info("Successfully started Mission by User's username and Mission instance.");
@@ -259,6 +261,10 @@ public class MissionServiceImpl implements MissionService {
         storedMission.get().setFinishTime(LocalDateTime.now());
         storedMission.get().getUserGameProfile().setCompletedMissionsNumber(
                 storedMission.get().getUserGameProfile().getCompletedMissionsNumber() + 1);
+        storedMission.get().getUserGameProfile().setExperience(
+                storedMission.get().getUserGameProfile().getExperience() +
+                        storedMission.get().getSpaceShip().getLevel() *
+                                Math.round(storedMission.get().getPayload() * 100));
 //        missionRepository.flush();
 
         LOGGER.info("Successfully completed Mission by User's username and Mission instance.");
