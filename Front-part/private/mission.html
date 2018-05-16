@@ -258,7 +258,8 @@
                         minute: 16,
                         second: 30,
                         dayOfYear: 134
-                    }
+                    },
+                    zoneOffsetSeconds: 7200
                 },
 
                 missionIsFinished: false,
@@ -391,7 +392,11 @@
 
 
                 refreshTimeLeft() {
-                    this.startTimeSeconds = this.mission.startTime.year * ((this.mission.startTime.year % 4 == 0) ? 366 : 365) * 24 * 60 * 60 +
+                    let clientZoneOffsetSeconds = new Date().getTimezoneOffset() * (-60);
+                    let serverZoneOffsetSeconds = this.mission.startTime.zoneOffsetSeconds;
+
+                    this.startTimeSeconds =
+                        this.mission.startTime.year * ((this.mission.startTime.year % 4 == 0) ? 366 : 365) * 24 * 60 * 60 +
                         this.mission.startTime.dayOfYear * 24 * 60 * 60 +
                         this.mission.startTime.hour * 60 * 60 +
                         this.mission.startTime.minute * 60 +
@@ -410,10 +415,15 @@
                         this.mission.finishTime.hour,
                         this.mission.finishTime.minute,
                         this.mission.finishTime.second
-                    ) - new Date();
+                    ) - new Date() - (serverZoneOffsetSeconds * 1000 - clientZoneOffsetSeconds * 1000);
 
-                    console.log('Start: ' + this.startTimeSecond)
                     this.timeLeftToMissionEnd = (timeLeftMillis - timeLeftMillis % 1000) / 1000;
+
+                    console.log(" * Left time refreshed!");
+                    console.log(" *    clientZoneOffsetSeconds=" + clientZoneOffsetSeconds);
+                    console.log(" *    serverZoneOffsetSeconds=" + serverZoneOffsetSeconds);
+                    console.log(" *    timeLeftMillis=" + timeLeftMillis);
+                    console.log(" *    this.timeLeftToMissionEnd=" + this.timeLeftToMissionEnd);
                 },
 
 

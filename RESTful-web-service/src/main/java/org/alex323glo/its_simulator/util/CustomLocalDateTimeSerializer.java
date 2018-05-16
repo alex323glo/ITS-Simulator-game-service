@@ -7,9 +7,12 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Custom JSON serializer for LocalDateTime objects serialization.
@@ -59,6 +62,7 @@ public class CustomLocalDateTimeSerializer extends JsonSerializer<LocalDateTime>
         gen.writeNumberField("minute", value.getMinute());
         gen.writeNumberField("second", value.getSecond());
         gen.writeNumberField("dayOfYear", value.getDayOfYear());
+        gen.writeNumberField("zoneOffsetSeconds", ZonedDateTime.now().getOffset().getTotalSeconds());
         gen.writeEndObject();
     }
 }

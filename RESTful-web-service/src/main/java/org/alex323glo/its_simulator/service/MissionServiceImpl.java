@@ -255,6 +255,14 @@ public class MissionServiceImpl implements MissionService {
             throw exception;
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        if (storedMission.get().getFinishTime().isBefore(now)) {
+            AppException exception =
+                    new AppException("Mission can't be completed. Its registered finishTime is not reached yet.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         storedMission.get().getSpaceShip().setSpaceShipStatus(SpaceShipStatus.FREE);
 
         storedMission.get().setMissionStatus(MissionStatus.COMPLETED);
