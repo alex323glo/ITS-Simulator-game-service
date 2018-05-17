@@ -55,7 +55,7 @@ public class MissionServiceTest {
     private static final String TEST_DESTINATION_PLANET_COLOR = "#445566";
     private static final Integer TEST_DESTINATION_PLANET_CIRCLES_NUMBER = 2;
 
-    private static final Long TEST_MISSION_DURATION_SECONDS = 30L;
+    private static final Long TEST_MISSION_DURATION_SECONDS = 5L;   // 5 seconds !
     private static final Double TEST_MISSION_PAYLOAD = 0.5;
 
     private static final String SPACE_SHIP_LEVEL_COEFFICIENT_PROP_NAME = "game.mechanics.ship_level_coefficient";
@@ -219,8 +219,11 @@ public class MissionServiceTest {
     }
 
     @Test
-    public void completeMission() throws AppException {
+    public void completeMission() throws AppException, InterruptedException {
         missionService.startMission(testUser.getUsername(), testMission);
+
+        // Wait (for 'testMission.duration' seconds) until mission can be completed:
+        Thread.sleep(TEST_MISSION_DURATION_SECONDS * 1_000);
 
         Mission completedMission = missionService.completeMission(testUser.getUsername(), testMission);
         assertEquals(MissionStatus.COMPLETED, completedMission.getMissionStatus());
