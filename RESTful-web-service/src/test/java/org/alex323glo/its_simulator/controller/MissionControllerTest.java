@@ -7,7 +7,6 @@ import org.alex323glo.its_simulator.service.MissionService;
 import org.alex323glo.its_simulator.service.PlanetService;
 import org.alex323glo.its_simulator.service.SpaceShipService;
 import org.alex323glo.its_simulator.service.UserService;
-import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,10 +48,16 @@ public class MissionControllerTest {
     private static final String TEST_START_PLANET_NAME = "P-001";
     private static final Long TEST_START_PLANET_POSITION_X = 50L;
     private static final Long TEST_START_PLANET_POSITION_Y = 50L;
+    private static final Integer TEST_START_PLANET_RADIUS = 10;
+    private static final String TEST_START_PLANET_COLOR = "#112233";
+    private static final Integer TEST_START_PLANET_CIRCLES_NUMBER = 1;
 
     private static final String TEST_DESTINATION_PLANET_NAME = "P-002";
     private static final Long TEST_DESTINATION_PLANET_POSITION_X = 300L;
     private static final Long TEST_DESTINATION_PLANET_POSITION_Y = 300L;
+    private static final Integer TEST_DESTINATION_PLANET_RADIUS = 20;
+    private static final String TEST_DESTINATION_PLANET_COLOR = "#445566";
+    private static final Integer TEST_DESTINATION_PLANET_CIRCLES_NUMBER = 2;
 
     private static final Double TEST_MISSION_PAYLOAD = 0.5;
 
@@ -85,10 +90,12 @@ public class MissionControllerTest {
                 TEST_SPACE_SHIP_MAX_CARGO_CAPACITY, TEST_SPACE_SHIP_LEVEL, TEST_SPACE_SHIP_SPEED);
 
         planetService.createPlanet(TEST_START_PLANET_NAME,
-                TEST_START_PLANET_POSITION_X, TEST_START_PLANET_POSITION_Y);
+                TEST_START_PLANET_POSITION_X, TEST_START_PLANET_POSITION_Y,
+                TEST_START_PLANET_RADIUS, TEST_START_PLANET_COLOR, TEST_START_PLANET_CIRCLES_NUMBER);
 
         planetService.createPlanet(TEST_DESTINATION_PLANET_NAME,
-                TEST_DESTINATION_PLANET_POSITION_X, TEST_DESTINATION_PLANET_POSITION_Y);
+                TEST_DESTINATION_PLANET_POSITION_X, TEST_DESTINATION_PLANET_POSITION_Y,
+                TEST_DESTINATION_PLANET_RADIUS, TEST_DESTINATION_PLANET_COLOR, TEST_DESTINATION_PLANET_CIRCLES_NUMBER);
 
         testMission = missionService.constructNewMission(TEST_USERNAME, TEST_START_PLANET_NAME,
                 TEST_DESTINATION_PLANET_NAME, TEST_SPACE_SHIP_NAME, TEST_MISSION_PAYLOAD);
@@ -103,9 +110,8 @@ public class MissionControllerTest {
     @Test
     @WithMockUser(username = TEST_USERNAME)
     public void getMission() throws Exception {
-        testMission.setUserGameProfile(
-                CircularityResolver.resolveLazyGameProfile(
-                        testMission.getUserGameProfile()));
+        testMission.setUserGameProfile(null);
+        testMission.getSpaceShip().setUserGameProfile(null);
 
         String testMissionJSON = new JacksonJsonProvider().toJson(testMission);
         mockMvc
@@ -128,9 +134,8 @@ public class MissionControllerTest {
                     Mission mission = missionService.findMission(TEST_USERNAME, testMission.getId());
                     assertEquals(MissionStatus.STARTED, mission.getMissionStatus());
 
-                    mission.setUserGameProfile(
-                            CircularityResolver.resolveLazyGameProfile(
-                                    mission.getUserGameProfile()));
+                    mission.setUserGameProfile(null);
+                    mission.getSpaceShip().setUserGameProfile(null);
 
                     String missionJSON = new JacksonJsonProvider().toJson(mission);
                     assertEquals(missionJSON, result.getResponse().getContentAsString());
@@ -150,9 +155,8 @@ public class MissionControllerTest {
                     Mission mission = missionService.findMission(TEST_USERNAME, testMission.getId());
                     assertEquals(MissionStatus.CANCELED, mission.getMissionStatus());
 
-                    mission.setUserGameProfile(
-                            CircularityResolver.resolveLazyGameProfile(
-                                    mission.getUserGameProfile()));
+                    mission.setUserGameProfile(null);
+                    mission.getSpaceShip().setUserGameProfile(null);
 
                     String missionJSON = new JacksonJsonProvider().toJson(mission);
                     assertEquals(missionJSON, result.getResponse().getContentAsString());

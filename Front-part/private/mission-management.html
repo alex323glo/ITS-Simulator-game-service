@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mission Management - ITS Simulator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./mission-management-page-resources/css/1-col-portfolio.css" rel="stylesheet">
+
+    <link href="./mission-management-page-resources/css/scrolling-nav.css" rel="stylesheet">
+
+    <!-- Vue.js -->
+    <script src="../common-resources/vendor/vue/vue.js"></script>
+    <script src="../common-resources/vendor/vue-resource/vue-resource.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                    <img src="./mission-management-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item">
+                            <a href="./personal.html" class="btn btn-outline-secondary">
+                                {{userData.username}}
+                                <img src="./mission-management-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                        <li class="nav-item">
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Log out</button>
+                            </form>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container">
+
+            <!-- Page Heading -->
+            <h1 class="my-4">
+                <br> Mission Management Page
+                <br>
+                <small>Here you can take control of your Transport Empire!</small>
+            </h1>
+
+
+            <div style="width: 100%; padding: 50px; margin-top: 50px; margin-bottom: 150px; text-align: center; border: 1px solid slateblue; border-radius: 10px;">
+                <a class="btn btn-outline-success btn-lg btn-block" href="./mission-constructor.html" style="display: inline-block; height: 100px; padding-top: 25px; border-radius: 20px; font-size: 30px;">
+                    New Mission
+                </a>
+                <div style="display: inline-block; width: 50px;"></div>
+                <a class="btn btn-outline-info btn-lg btn-block js-scroll-trigger" href="#missions" style="display: inline-block; height: 100px; padding-top: 25px; border-radius: 20px; font-size: 30px;">
+                    Mission List
+                </a>
+                <div style="display: inline-block; width: 50px;"></div>
+                <a class="btn btn-outline-primary btn-lg btn-block" href="./space-map.html" style="display: inline-block; height: 100px; padding-top: 25px; border-radius: 20px; font-size: 30px;">
+                    To Space Map
+                </a>
+            </div>
+
+            <section id="missions">
+
+                <h2 class="my-4">
+                    Missions <br>
+                    <small>Whole list of your missions</small>
+                </h2>
+
+                <hr>
+
+                <ul>
+                    <li v-for="mission in pagedMissions" style="list-style: none;">
+
+
+                        <!-- Project One -->
+                        <div class="row">
+                            <div class="col-md-7">
+                                <a href="#">
+                                    <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/700x300" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-5">
+                                <h3>Mission #{{mission.id}}</h3>
+                                <br>
+                                <h5>
+                                    <a :class="missionStatusButtonClass(mission.missionStatus)" :href="getRefToMission(mission.id)">
+                                    {{mission.missionStatus}}
+                                </a>
+                                </h5>
+                                <br>
+
+                                <h6>Started from: <b>"{{mission.startPoint.name}}"</b></h6>
+                                <h6>Is going to: <b>"{{mission.destinationPoint.name}}"</b></h6>
+                                <h6>Carried by: <b>"{{mission.spaceShip.name}}"</b></h6>
+
+                                <br>
+                                <a class="btn btn-outline-primary btn-lg" :href="getRefToMission(mission.id)">To mission</a>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+
+                        <hr>
+                    </li>
+                </ul>
+
+
+                <!-- Pagination -->
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" :style="overPrevVisibility">
+                        <a class="page-link" :href="'#' + (pageNumber - 2)" aria-label="Previous" @click="overPrevPage">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item" :style="prevVisibility">
+                        <a class="page-link" :href="'#' + (pageNumber - 1)" @click="prevPage">
+                        {{pageNumber - 1}}
+                    </a>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" type="submit" @click="currentPageReload">
+                        {{pageNumber}}
+                    </button>
+                    </li>
+                    <li class="page-item" :style="nextVisibility">
+                        <a class="page-link" :href="'#' + (pageNumber + 1)" @click="nextPage">
+                        {{pageNumber + 1}}
+                    </a>
+                    </li>
+                    <li class="page-item" :style="overNextVisibility">
+                        <a class="page-link" :href="'#' + (pageNumber + 2)" aria-label="Next" @click="overNextPage">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </section>
+
+        </div>
+        <!-- /.container -->
+
+
+
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+            </div>
+            <!-- /.container -->
+        </footer>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                pageNumber: 1,
+
+                userData: {
+                    username: ''
+                },
+
+                defaultUserData: {
+                    username: '[username]'
+                },
+
+                missions: [],
+
+                defaultMissions: [{
+                        id: 1,
+                        missionStatus: 'CANCELED',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 2,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 3,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 4,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 5,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 6,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 7,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    },
+
+                    {
+                        id: 8,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 9,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 10,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 11,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 12,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 13,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 14,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 15,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 16,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }, {
+                        id: 17,
+                        missionStatus: '[STATUS]',
+                        startPoint: {
+                            planetName: '[start_planet]'
+                        },
+                        destinationPoint: {
+                            planetName: '[destination_planet]'
+                        },
+                        spaceShip: {
+                            name: '[space_ship]'
+                        }
+                    }
+                ],
+
+                pagedMissions: [],
+            },
+
+            computed: {
+                overPrevVisibility() {
+                    return (this.pageNumber > 2) ? '' : 'visibility:hidden;';
+                },
+                prevVisibility() {
+                    return (this.pageNumber > 1) ? '' : 'visibility:hidden;';
+                },
+                nextVisibility() {
+                    return (this.pageNumber < (this.missions.length / 4)) ? '' : 'visibility:hidden;';
+                },
+                overNextVisibility() {
+                    return ((this.pageNumber + 1) < (this.missions.length / 4)) ? '' : 'visibility:hidden;';
+                }
+            },
+
+            methods: {
+                requestAllMissions() {
+                    this.$http.get('/private/mission-management/missions').then(
+                        (success) => {
+                            console.log('Successfully loaded all missions! :)')
+                            console.log('All missions: \n' + JSON.stringify(success.body));
+                            this.missions = success.body;
+                            console.log('Missions: \n' + JSON.stringify(this.missions));
+                            this.calculatePagination();
+                            console.log('Paged missions: \n' + JSON.stringify(this.pagedMissions));
+                        },
+                        (fail) => {
+                            console.log('Failed to load all missions! :(');
+                            this.missions = this.defaultMissions;
+                            console.log('Missions: \n' + JSON.stringify(this.missions));
+                            this.calculatePagination();
+                            console.log('Paged missions: \n' + JSON.stringify(this.pagedMissions));
+                        }
+                    );
+                },
+                calculatePagination() {
+                    let pageNumber = this.pageNumber;
+                    if (pageNumber < 1) {
+                        this.pagedMissions = this.missions.length < 5 ?
+                            this.missions :
+                            this.missions.slice(0, 0 + 4);
+                    } else {
+                        let startInex = (pageNumber - 1) * 4;
+                        console.log('calculatePagination(): startIndex=' + startInex + ', missions.length=' + this.missions.length);
+                        this.pagedMissions = this.missions.length - startInex < 5 ?
+                            this.missions.slice(startInex, this.missions.length) :
+                            this.missions.slice(startInex, startInex + 4)
+                    }
+                },
+
+                requestUsername() {
+                    this.$http.get('/get-authenticated-username').then(
+                        (success) => {
+                            console.log('Successfully loaded username! :)');
+                            this.userData.username = success.bodyText;
+                        },
+                        (fail) => {
+                            console.log('Failed to load username! :(');
+                            this.userData = this.defaultUserData;
+                        }
+                    );
+                },
+                getCurrentPageNumber() {
+                    let pageNumberValue = parseInt(window.location.hash.substr(1));
+                    console.log('Current page is "' + pageNumberValue + '".');
+                    return isNaN(pageNumberValue) ? 1 : pageNumberValue;
+                },
+
+                overPrevPage() {
+                    this.pageNumber -= 2;
+                    this.calculatePagination();
+                },
+                prevPage() {
+                    this.pageNumber--;
+                    this.calculatePagination();
+                },
+                currentPageReload() {
+                    window.location.reload(true);
+                },
+                nextPage() {
+                    this.pageNumber++;
+                    this.calculatePagination();
+                },
+                overNextPage() {
+                    this.pageNumber += 2;
+                    this.calculatePagination();
+                },
+
+                missionStatusButtonClass(missionStatus) {
+                    switch (missionStatus) {
+                        case 'CREATED':
+                            return 'btn btn-info';
+                        case 'STARTED':
+                            return 'btn btn-success';
+                        case 'COMPLETED':
+                            return 'btn btn-primary';
+                        case 'CANCELED':
+                            return 'btn btn-warning';
+                        default:
+                            return 'btn btn-secondary';
+                    }
+                },
+
+                getRefToMission(missionId) {
+                    return './mission.html#' + missionId;
+                }
+            },
+
+            mounted() {
+                this.pageNumber = this.getCurrentPageNumber();
+                this.requestUsername();
+                this.requestAllMissions();
+            }
+
+        });
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../common-resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="./mission-management-page-resources/js/scrolling-nav.js"></script>
+</body>
+
+</html>

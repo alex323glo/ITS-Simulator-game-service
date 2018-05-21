@@ -136,7 +136,9 @@ public class MissionServiceImpl implements MissionService {
         }
 
         storedMission.get().setMissionStatus(MissionStatus.STARTED);
+
         storedMission.get().setStartTime(LocalDateTime.now());
+        storedMission.get().setFinishTime(LocalDateTime.now().plusSeconds(storedMission.get().getDuration()));
 //        missionRepository.flush();
 
         LOGGER.info("Successfully started Mission by User's username and Mission instance.");
@@ -192,6 +194,8 @@ public class MissionServiceImpl implements MissionService {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+
+        storedMission.get().getSpaceShip().setSpaceShipStatus(SpaceShipStatus.FREE);
 
         storedMission.get().setMissionStatus(MissionStatus.CANCELED);
         storedMission.get().setFinishTime(LocalDateTime.now());
@@ -251,8 +255,24 @@ public class MissionServiceImpl implements MissionService {
             throw exception;
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        if (storedMission.get().getFinishTime().isAfter(now)) {
+            AppException exception =
+                    new AppException("Mission can't be completed. Its registered finishTime is not reached yet.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        storedMission.get().getSpaceShip().setSpaceShipStatus(SpaceShipStatus.FREE);
+
         storedMission.get().setMissionStatus(MissionStatus.COMPLETED);
         storedMission.get().setFinishTime(LocalDateTime.now());
+        storedMission.get().getUserGameProfile().setCompletedMissionsNumber(
+                storedMission.get().getUserGameProfile().getCompletedMissionsNumber() + 1);
+        storedMission.get().getUserGameProfile().setExperience(
+                storedMission.get().getUserGameProfile().getExperience() +
+                        storedMission.get().getSpaceShip().getLevel() *
+                                Math.round(storedMission.get().getPayload() * 100));
 //        missionRepository.flush();
 
         LOGGER.info("Successfully completed Mission by User's username and Mission instance.");
@@ -406,6 +426,8 @@ public class MissionServiceImpl implements MissionService {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+
+        spaceShip.setSpaceShipStatus(SpaceShipStatus.BUSY);
 
         Mission savedMission = missionRepository.save(Mission.builder()
                 .userGameProfile(spaceShip.getUserGameProfile())

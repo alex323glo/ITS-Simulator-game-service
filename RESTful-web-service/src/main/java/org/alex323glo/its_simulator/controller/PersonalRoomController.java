@@ -66,6 +66,7 @@ public class PersonalRoomController {
                 }
 
                 userGameProfile = CircularityResolver.resolveLazyGameProfile(userGameProfile);
+                userGameProfile.getUser().setPassword(null);
 
                 LOGGER.info("Successfully served '/private/personal-room/user-extension' endpoint " +
                         "(send User object data to '" + principal.getName() + "' user).");

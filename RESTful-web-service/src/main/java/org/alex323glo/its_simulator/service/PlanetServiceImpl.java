@@ -38,20 +38,29 @@ public class PlanetServiceImpl implements PlanetService {
     /**
      * Saves new Planet to System.
      *
-     * @param planetName unique and valid name of new Planet.
-     * @param positionX  valid X coordinate of new Planet.
-     * @param positionY  valid Y coordinate of new Planet.
-     * @return (not null) saved Planet, if operation was successfull.
+     * @param planetName     unique and valid name of new Planet.
+     * @param positionX      valid X coordinate of new Planet.
+     * @param positionY      valid Y coordinate of new Planet.
+     * @param radius         valid radius of new Planet.
+     * @param hexColorString valid String Hex color code of new Planet.
+     * @param circlesNumber  number of planetary circles around new Planet.
+     * @return (not null) saved Planet, if operation was successful.
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
-    public Planet createPlanet(String planetName, Long positionX, Long positionY) throws AppException {
+    public Planet createPlanet(String planetName, Long positionX, Long positionY, Integer radius,
+                               String hexColorString, Integer circlesNumber) throws AppException {
         LOGGER.info("Trying to create new Planet...");
 
         try {
             validator.validatePlanetName(planetName)
-                    .validatePlanetCoordinate(positionX).validatePlanetCoordinate(positionY);
+                    .validatePlanetCoordinate(positionX)
+                    .validatePlanetCoordinate(positionY)
+                    .validatePlanetRadius(radius)
+                    .validateHexColorString(hexColorString)
+                    .validatePlanetCirclesNumber(circlesNumber);
         } catch (ValidationException e) {
             AppException exception = new AppException("Can't create new Planet. " + e.getMessage());
             LOGGER.error(exception.getMessage(), exception);
@@ -68,6 +77,9 @@ public class PlanetServiceImpl implements PlanetService {
                 .name(planetName)
                 .positionX(positionX)
                 .positionY(positionY)
+                .radius(radius)
+                .color(hexColorString)
+                .circles(circlesNumber)
                 .build();
 
         Planet savedPlanet = planetRepository.save(planet);
@@ -129,6 +141,7 @@ public class PlanetServiceImpl implements PlanetService {
      * @throws AppException if System can't carry out this operation in some reasons
      *                      (see more in method's realisation).
      */
+    @Transactional
     @Override
     public void deleteAllPlanets() throws AppException {
         LOGGER.info("Trying to delete all Planets...");

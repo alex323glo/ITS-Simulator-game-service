@@ -24,6 +24,9 @@ public class PlanetServiceTest {
     private static final String TEST_PLANET_NAME = "P-001";
     private static final Long TEST_PLANET_POSITION_X = 50L;
     private static final Long TEST_PLANET_POSITION_Y = 50L;
+    private static final Integer TEST_PLANET_RADIUS = 10;
+    private static final String TEST_PLANET_COLOR = "#112233";
+    private static final Integer TEST_PLANET_CIRCLES_NUMBER = 1;
 
     private static Planet testPlanet;
 
@@ -42,6 +45,9 @@ public class PlanetServiceTest {
                         .name(TEST_PLANET_NAME)
                         .positionX(TEST_PLANET_POSITION_X)
                         .positionY(TEST_PLANET_POSITION_Y)
+                        .radius(TEST_PLANET_RADIUS)
+                        .color(TEST_PLANET_COLOR)
+                        .circles(TEST_PLANET_CIRCLES_NUMBER)
                         .build());
     }
 
@@ -55,15 +61,22 @@ public class PlanetServiceTest {
         String anotherTestPlanetName = "another_" + TEST_PLANET_NAME;
         Long anotherTestPlanetPositionX = 100L + TEST_PLANET_POSITION_X;
         Long anotherTestPlanetPositionY = 100L + TEST_PLANET_POSITION_Y;
+        Integer anotherTestPlanetRadius = 5 + TEST_PLANET_RADIUS;
+        String anotherTestPlanetColor = "#ffffff";
+        Integer anotherTestPlanetCirclesNumber = 5;
 
         Planet createdPlanet = planetService.createPlanet(anotherTestPlanetName,
-                anotherTestPlanetPositionX, anotherTestPlanetPositionY);
+                anotherTestPlanetPositionX, anotherTestPlanetPositionY,
+                anotherTestPlanetRadius, anotherTestPlanetColor, anotherTestPlanetCirclesNumber);
 
         Planet expectedPlanet = Planet.builder()
                 .id(createdPlanet.getId())
                 .name(anotherTestPlanetName)
                 .positionX(anotherTestPlanetPositionX)
                 .positionY(anotherTestPlanetPositionY)
+                .radius(anotherTestPlanetRadius)
+                .color(anotherTestPlanetColor)
+                .circles(anotherTestPlanetCirclesNumber)
                 .build();
 
         assertEquals(expectedPlanet, createdPlanet);

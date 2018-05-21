@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface SpaceShipRepository extends JpaRepository<SpaceShip, Long> {
 
-    SpaceShip findByNameAndAndUserGameProfile_User_Username(String spaceShipName, String username);
+    SpaceShip findByNameAndUserGameProfile_User_Username(String spaceShipName, String username);
 
     List<SpaceShip> findAllByUserGameProfile_User_Username(String username);
 

@@ -49,5 +49,18 @@ public class UserGameProfile {
     )
     private List<Mission> missions;
 
+
+    // Additional
+
+    @Column(nullable = false)
+    private Long experience;
+
+    @Column(nullable = false)
+    private Integer completedMissionsNumber;
+
+    @Column(nullable = false)
+    private Integer shipsNumber;
+
+
     // TODO complete...
 }

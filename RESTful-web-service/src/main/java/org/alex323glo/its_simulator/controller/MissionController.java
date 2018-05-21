@@ -3,7 +3,6 @@ package org.alex323glo.its_simulator.controller;
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.service.MissionService;
-import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,12 @@ import java.security.Principal;
  *      - must be authenticated!
  *
  *  3) '/private/mission/cancel'
+ *      - method: POST;
+ *      - params: id (of mission);
+ *      - response: OK (200) with Mission object as body;
+ *      - must be authenticated!
+ *
+ *  4) '/private/mission/complete'
  *      - method: POST;
  *      - params: id (of mission);
  *      - response: OK (200) with Mission object as body;
@@ -74,14 +79,14 @@ public class MissionController {
 
         try {
             Mission mission = missionService.findMission(principal.getName(), convertedMissionId);
-            mission.setUserGameProfile(
-                    CircularityResolver.resolveLazyGameProfile(
-                            mission.getUserGameProfile()));
 
             if (mission == null) {
                 LOGGER.warn("Can't find such mission in Data Base.");
                 return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.NOT_FOUND);
             }
+
+            mission.setUserGameProfile(null);
+            mission.getSpaceShip().setUserGameProfile(null);
 
             LOGGER.info("Successfully served '/private/mission/details' endpoint " +
                     "(send Mission to '" + principal.getName() + "' user).");
@@ -119,9 +124,8 @@ public class MissionController {
             }
 
             Mission startedMission = missionService.startMission(principal.getName(), mission);
-            startedMission.setUserGameProfile(
-                    CircularityResolver.resolveLazyGameProfile(
-                            startedMission.getUserGameProfile()));
+            startedMission.setUserGameProfile(null);
+            startedMission.getSpaceShip().setUserGameProfile(null);
 
             LOGGER.info("Successfully served '/private/mission/start' endpoint " +
                     "(start Mission of '" + principal.getName() + "' user).");
@@ -159,13 +163,51 @@ public class MissionController {
             }
 
             Mission canceledMission = missionService.cancelMission(principal.getName(), mission);
-            canceledMission.setUserGameProfile(
-                    CircularityResolver.resolveLazyGameProfile(
-                            canceledMission.getUserGameProfile()));
+            canceledMission.setUserGameProfile(null);
+            canceledMission.getSpaceShip().setUserGameProfile(null);
 
             LOGGER.info("Successfully served '/private/mission/cancel' endpoint " +
                     "(cancel Mission of '" + principal.getName() + "' user).");
             return new ResponseEntity<>(canceledMission, HttpStatus.OK);
+        } catch (AppException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/complete")
+    public ResponseEntity<?> completeMission(
+            @RequestParam(name = "id") String missionId,
+            Principal principal) {
+
+        LOGGER.info("Serving '/private/mission/complete' endpoint (POST request)...");
+        if (principal == null) {
+            LOGGER.warn("Non-authorized User tries to access private info!");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Long convertedMissionId = null;
+        try {
+            convertedMissionId = Long.valueOf(missionId);
+        } catch (NumberFormatException e) {
+            LOGGER.error(e.getMessage(), e);
+            return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Mission mission = missionService.findMission(principal.getName(), convertedMissionId);
+            if (mission == null) {
+                LOGGER.warn("Can't find such mission in Data Base.");
+                return new ResponseEntity<>("Wrong mission ID was sent.", HttpStatus.NOT_FOUND);
+            }
+
+            Mission completedMission = missionService.completeMission(principal.getName(), mission);
+            completedMission.setUserGameProfile(null);
+            completedMission.getSpaceShip().setUserGameProfile(null);
+
+            LOGGER.info("Successfully served '/private/mission/complete' endpoint " +
+                    "(complete Mission of '" + principal.getName() + "' user).");
+            return new ResponseEntity<>(completedMission, HttpStatus.OK);
         } catch (AppException e) {
             LOGGER.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

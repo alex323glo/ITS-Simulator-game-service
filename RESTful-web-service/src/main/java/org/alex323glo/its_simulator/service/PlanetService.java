@@ -20,11 +20,15 @@ public interface PlanetService {
      * @param planetName unique and valid name of new Planet.
      * @param positionX valid X coordinate of new Planet.
      * @param positionY valid Y coordinate of new Planet.
-     * @return (not null) saved Planet, if operation was successfull.
+     * @param radius valid radius of new Planet.
+     * @param hexColorString valid String Hex color code of new Planet.
+     * @param circlesNumber number of planetary circles around new Planet.
+     * @return (not null) saved Planet, if operation was successful.
      * @throws AppException if System can't carry out this operation in some reasons
      * (see more in method's realisation).
      */
-    Planet createPlanet(String planetName, Long positionX, Long positionY) throws AppException;
+    Planet createPlanet(String planetName, Long positionX, Long positionY, Integer radius,
+                        String hexColorString, Integer circlesNumber) throws AppException;
 
     /**
      * Searches for existent Planet.

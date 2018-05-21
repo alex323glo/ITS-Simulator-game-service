@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mission - ITS Simulator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../common-resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./mission-page-resources/css/the-big-picture.css" rel="stylesheet">
+
+    <!-- Vue.js -->
+    <script src="../common-resources/vendor/vue/vue.js"></script>
+    <script src="../common-resources/vendor/vue-resource/vue-resource.min.js"></script>
+
+    <style>
+         ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app">
+
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand js-scroll-trigger" href="../welcome.html#page-top">
+                    <img src="./mission-page-resources/img/rocket.png" alt="logo" width="50"> ITS Simulator
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item">
+                            <a href="./mission-management.html" class="btn btn-outline-success">
+                            Back to management
+                        </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 50px; height: 20px;"></div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="./personal.html" class="btn btn-outline-secondary">
+                            {{userData.username}}
+                            <img src="./mission-page-resources/img/astronaut-icon-vector.png" width="25px" alt="">
+                        </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                        <li class="nav-item">
+                            <form action="/logout" method="POST">
+                                <button type="submit" class="btn btn-danger">Log out</button>
+                            </form>
+                        </li>
+
+                        <li class="nav-item">
+                            <div style="width: 10px; height: 10px;"></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <section style="width: 90%; margin: 5%;">
+            <div class="container">
+                <div class="row">
+                    <!--
+                <div class="col-lg-6">
+                    <h1 class="mt-5">The Big Picture</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt voluptates rerum eveniet sapiente repellat esse, doloremque quod recusandae deleniti nostrum assumenda vel beatae sed aut modi nesciunt porro quisquam voluptatem.</p>
+                </div>
+                -->
+
+
+
+                </div>
+            </div>
+
+            <div>
+                <div style="width: 1200px; margin: 100px; overflow: scroll;">
+                    <div id="startPlanet" style="display: inline-block;">
+                        <img width="300" src="./mission-page-resources/img/earth.png" alt="">
+                    </div>
+
+                    <div style="display: inline-block; width: 400px; text-align: center;">
+
+
+
+                        <br><br>
+
+                        <div v-if="missionIsStarted() && !missionIsFinished">
+                            <div class="btn-group">
+                                <div class="btn btn-warning btn-lg">
+                                    {{leftHours}} hours
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    {{leftMinutes}} minutes
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    {{leftSeconds}} seconds
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="missionIsStarted() && missionIsFinished && !missionIsCompletedOrCanceled()">
+                            <div class="btn-group">
+                                <div class="btn btn-warning btn-lg">
+                                    0 hours
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    0 minutes
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    0 seconds
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="missionIsCreated() || missionIsCompletedOrCanceled()">
+                            <div class="btn-group">
+                                <div class="btn btn-warning btn-lg">
+                                    {{convertMissionDuration().hours}} hours
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    {{convertMissionDuration().minutes}} minutes
+                                </div>
+                                <div class="btn btn-warning btn-lg">
+                                    {{convertMissionDuration().seconds}} seconds
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="destinationPlanet" style="display: inline-block;">
+                        <img width="300" src="./mission-page-resources/img/venus.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+
+            </div>
+
+            <div>
+
+            </div>
+
+            <div style="width: 1000px; margin: 100px;">
+                <div v-if="missionIsStarted()" class="progress" style="width: 100%;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="getProgressBarStatusStyle">
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-left: 10%; margin-right: 10%; padding-left: 10%; padding-right: 10%; width: 80%; height: 150px;">
+                <button :class="getMissionAction().buttonStyle" @click.prevent="getMissionAction().action()">
+                    <h3>{{getMissionAction().button}}</h3>
+                </button>
+            </div>
+
+            <div class="card bg-dark" style="width: 300px; margin-left: 35%; margin-bottom: 200px; margin-top: 100px; color: paleturquoise;">
+                <div class="card-header" style="text-align: center;">
+                    <h3>Mission</h3>
+                </div>
+                <div class="card-body">
+                    <h5>ID: <small>#{{mission.id}}</small></h5>
+                    <hr>
+                    <h5>From: <small>"{{mission.startPoint.name}}" ({{mission.startPoint.positionX}};{{mission.startPoint.positionY}})</small></h5>
+                    <h5>To: <small>"{{mission.destinationPoint.name}}" ({{mission.destinationPoint.positionX}};{{mission.destinationPoint.positionY}})</small></h5>
+                    <h5>Payload: <small>{{mission.payload}} tons</small></h5>
+                    <hr>
+                    <h5>Ship: <small>"{{mission.spaceShip.name}}"</small></h5>
+                    <h5>Ship level: <small>{{mission.spaceShip.level}}</small></h5>
+                    <h5>Ship speed: <small>{{mission.spaceShip.speed}} points/s</small></h5>
+                </div>
+            </div>
+
+        </section>
+
+
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                intervalID: 0,
+
+                userData: {
+
+                },
+                defaultUserData: {
+                    username: '[username]'
+                },
+
+                mission: {},
+                defaultMission: {
+                    id: 1,
+                    missionStatus: 'CREATED',
+                    duration: 3666, // !!!
+                    payload: 1.1,
+                    startPoint: {
+                        name: 'P-001',
+                        positionX: 100,
+                        positionY: 100
+                    },
+                    destinationPoint: {
+                        name: 'P-002',
+                        positionX: 200,
+                        positionY: 200
+                    },
+                    spaceShip: {
+                        name: 'Dragon-1',
+                        level: 1,
+                        speed: 30.0
+                    },
+                    startTime: {
+                        year: 2018,
+                        month: 5,
+                        dayOfMonth: 14,
+                        hour: 2,
+                        minute: 54,
+                        second: 0,
+                        dayOfYear: 134
+                    },
+                    finishTime: {
+                        year: 2018,
+                        month: 5,
+                        dayOfMonth: 14,
+                        hour: 3,
+                        minute: 16,
+                        second: 30,
+                        dayOfYear: 134
+                    },
+                    zoneOffsetSeconds: 7200
+                },
+
+                missionIsFinished: false,
+
+                startTimeSeconds: 0,
+                finishTimeSeconds: 0,
+
+                timeLeftToMissionEnd: 0
+            },
+
+            computed: {
+                leftHours() {
+                    return (this.timeLeftToMissionEnd - this.timeLeftToMissionEnd % 3600) / 3600;
+                },
+                leftMinutes() {
+                    return ((this.timeLeftToMissionEnd % 3600) - (this.timeLeftToMissionEnd % 3600) % 60) / 60;
+                },
+                leftSeconds() {
+                    return this.timeLeftToMissionEnd % 60;
+                },
+
+                getProgressBarStatusStyle() {
+                    let value = ((this.finishTimeSeconds - this.startTimeSeconds - this.timeLeftToMissionEnd) / (this.finishTimeSeconds - this.startTimeSeconds)) * 100;
+                    console.log(value + ' (' + this.startTimeSeconds + ' : ' + this.finishTimeSeconds + ')');
+                    return value < 0 ? 'width: 100%' : 'width: ' + value + '%';
+                },
+            },
+
+            methods: {
+                getMissionIdFromURL() {
+                    let hash = window.location.hash;
+                    return parseInt(hash.substr(1));
+                },
+
+                convertMissionDuration() {
+                    return {
+                        hours: (this.mission.duration - this.mission.duration % 3600) / 3600,
+                        minutes: ((this.mission.duration % 3600) - (this.mission.duration % 3600) % 60) / 60,
+                        seconds: this.mission.duration % 60
+                    };
+                },
+
+                getMissionAction() {
+                    console.log('Mission status: ' + this.mission.missionStatus)
+                    switch (this.mission.missionStatus) {
+                        case 'CREATED':
+                            return {
+                                button: 'Start mission',
+                                buttonStyle: 'btn btn-outline-success btn-block',
+                                action: this.startMission
+                            };
+                        case 'STARTED':
+                            if (this.missionIsFinished) {
+                                return {
+                                    button: 'Complete mission',
+                                    buttonStyle: 'btn btn-outline-primary btn-block',
+                                    action: this.completeMission
+                                };
+                            } else {
+                                return {
+                                    button: 'Cancel mission',
+                                    buttonStyle: 'btn btn-outline-danger btn-block',
+                                    action: this.cancelMission
+                                };
+                            }
+                        case 'COMPLETED':
+                            return {
+                                button: 'Mission completed! Back to management?',
+                                buttonStyle: 'btn btn-primary btn-block',
+                                action: this.goBackToManagementPage
+                            };
+                        case 'CANCELED':
+                            return {
+                                button: 'Mission was canceled! Back to management?',
+                                buttonStyle: 'btn btn-danger btn-block',
+                                action: this.goBackToManagementPage
+                            };
+                        default:
+                            return {
+                                button: '[mission_action]',
+                                action: window.location.reload
+                            };
+                    }
+                },
+
+                missionIsCreated() {
+                    return this.mission.missionStatus === 'CREATED';
+                },
+
+                missionIsStarted() {
+                    return this.mission.missionStatus === 'STARTED';
+                },
+
+                missionIsCompletedOrCanceled() {
+                    return this.mission.missionStatus === 'COMPLETED' || this.mission.missionStatus === 'CANCELED';
+                },
+
+                requestUsername() {
+                    this.$http.get('/private/personal-room/user-data').then(
+                        (success) => {
+                            console.log('Successfully loaded username! :)');
+                            this.userData.username = success.body.user.username;
+                        },
+                        (fail) => {
+                            console.log('Failed to load loaded! :(');
+                            this.userData = this.defaultUserData;
+                        }
+                    );
+                },
+
+                requestMission() {
+                    this.$http.get('/private/mission/details', {
+                        params: {
+                            id: this.getMissionIdFromURL()
+                        }
+                    }).then(
+                        (success) => {
+                            console.log('Successfully loaded mission! :)');
+                            console.log('Loaded mission: \n' + JSON.stringify(success.body))
+                            this.mission = success.body;
+                            this.refreshTimeLeft();
+                        },
+                        (fail) => {
+                            console.log('Failed to load mission! :(');
+                            this.mission = this.defaultMission;
+                            this.refreshTimeLeft();
+                        }
+                    );
+                },
+
+
+                refreshTimeLeft() {
+                    let clientZoneOffsetSeconds = new Date().getTimezoneOffset() * (-60);
+                    let serverZoneOffsetSeconds = this.mission.startTime.zoneOffsetSeconds;
+
+                    this.startTimeSeconds =
+                        this.mission.startTime.year * ((this.mission.startTime.year % 4 == 0) ? 366 : 365) * 24 * 60 * 60 +
+                        this.mission.startTime.dayOfYear * 24 * 60 * 60 +
+                        this.mission.startTime.hour * 60 * 60 +
+                        this.mission.startTime.minute * 60 +
+                        this.mission.startTime.second;
+
+                    this.finishTimeSeconds = this.mission.finishTime.year * ((this.mission.finishTime.year % 4 == 0) ? 366 : 365) * 24 * 60 * 60 +
+                        this.mission.finishTime.dayOfYear * 24 * 60 * 60 +
+                        this.mission.finishTime.hour * 60 * 60 +
+                        this.mission.finishTime.minute * 60 +
+                        this.mission.finishTime.second;
+
+                    let timeLeftMillis = new Date(
+                        this.mission.finishTime.year,
+                        this.mission.finishTime.month - 1,
+                        this.mission.finishTime.dayOfMonth,
+                        this.mission.finishTime.hour,
+                        this.mission.finishTime.minute,
+                        this.mission.finishTime.second
+                    ) - new Date() - (serverZoneOffsetSeconds * 1000 - clientZoneOffsetSeconds * 1000);
+
+                    this.timeLeftToMissionEnd = (timeLeftMillis - timeLeftMillis % 1000) / 1000;
+
+                    console.log(" * Left time refreshed!");
+                    console.log(" *    clientZoneOffsetSeconds=" + clientZoneOffsetSeconds);
+                    console.log(" *    serverZoneOffsetSeconds=" + serverZoneOffsetSeconds);
+                    console.log(" *    timeLeftMillis=" + timeLeftMillis);
+                    console.log(" *    this.timeLeftToMissionEnd=" + this.timeLeftToMissionEnd);
+                },
+
+
+
+
+                startMission() {
+                    this.$http.post('/private/mission/start', {}, {
+                        params: {
+                            id: this.mission.id
+                        }
+                    }).then(
+                        (success) => {
+                            console.log('Successfully started mission! :)');
+                            window.location.reload();
+                        },
+                        (fail) => {
+                            console.log('Failed to start mission! :(');
+                            alert('Failed to start mission :(');
+                        }
+                    );
+                },
+
+                cancelMission() {
+                    this.$http.post('/private/mission/cancel', {}, {
+                        params: {
+                            id: this.mission.id
+                        }
+                    }).then(
+                        (success) => {
+                            console.log('Successfully canceled mission! :)');
+                            window.location.reload();
+                        },
+                        (fail) => {
+                            console.log('Failed to cancel mission! :(');
+                            alert('Failed to cancel mission :(');
+                        }
+                    );
+                },
+
+                completeMission() {
+                    this.$http.post('/private/mission/complete', {}, {
+                        params: {
+                            id: this.mission.id
+                        }
+                    }).then(
+                        (success) => {
+                            console.log('Successfully completed mission! :)');
+                            window.location.reload();
+                        },
+                        (fail) => {
+                            console.log('Failed to complete mission! :(');
+                            alert('Failed to complete mission :(');
+                        }
+                    );
+                },
+
+                goBackToManagementPage() {
+                    window.location.replace('./mission-management.html');
+                }
+
+            },
+
+            mounted() {
+                this.requestUsername();
+                this.requestMission();
+
+                this.intervalID = window.setInterval(() => {
+                    if (this.timeLeftToMissionEnd <= 0) {
+                        window.clearInterval(this.intervalID);
+                        this.missionIsFinished = true;
+                        return;
+                    }
+                    this.timeLeftToMissionEnd -= 1;
+                }, 1000);
+            }
+        });
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../common-resources/vendor/jquery/jquery.min.js"></script>
+    <script src="../common-resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

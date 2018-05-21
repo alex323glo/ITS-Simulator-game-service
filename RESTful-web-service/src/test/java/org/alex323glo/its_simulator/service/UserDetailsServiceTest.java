@@ -48,6 +48,9 @@ public class UserDetailsServiceTest {
         UserGameProfile userGameProfile = UserGameProfile.builder()
                 .ships(new ArrayList<>())
                 .missions(new ArrayList<>())
+                .experience(0L)
+                .completedMissionsNumber(0)
+                .shipsNumber(0)
                 .build();
         User user = User.builder()
                 .username(TEST_USERNAME)
