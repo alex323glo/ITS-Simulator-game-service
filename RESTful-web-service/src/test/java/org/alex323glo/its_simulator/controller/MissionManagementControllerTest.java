@@ -6,7 +6,6 @@ import org.alex323glo.its_simulator.service.MissionService;
 import org.alex323glo.its_simulator.service.PlanetService;
 import org.alex323glo.its_simulator.service.SpaceShipService;
 import org.alex323glo.its_simulator.service.UserService;
-import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

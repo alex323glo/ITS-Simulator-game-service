@@ -131,7 +131,7 @@ public class Validator {
         }
 
         try {
-            Color decodedColor = Color.decode(hexColorString);
+            Color.decode(hexColorString);
         } catch (NumberFormatException e) {
             throw new ValidationException(
                     "Hex color string validation failed (string can't be decoded to Color).", e);

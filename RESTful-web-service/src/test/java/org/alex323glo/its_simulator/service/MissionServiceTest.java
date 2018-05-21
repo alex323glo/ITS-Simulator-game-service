@@ -102,7 +102,7 @@ public class MissionServiceTest {
                         .positionX(TEST_DESTINATION_PLANET_POSITION_X)
                         .positionY(TEST_DESTINATION_PLANET_POSITION_Y)
                         .radius(TEST_DESTINATION_PLANET_RADIUS)
-                        .color(TEST_START_PLANET_COLOR)
+                        .color(TEST_DESTINATION_PLANET_COLOR)
                         .circles(TEST_DESTINATION_PLANET_CIRCLES_NUMBER)
                         .build());
 

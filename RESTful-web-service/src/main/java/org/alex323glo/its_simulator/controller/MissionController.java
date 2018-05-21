@@ -3,7 +3,6 @@ package org.alex323glo.its_simulator.controller;
 import org.alex323glo.its_simulator.exception.AppException;
 import org.alex323glo.its_simulator.model.game.Mission;
 import org.alex323glo.its_simulator.service.MissionService;
-import org.alex323glo.its_simulator.util.CircularityResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

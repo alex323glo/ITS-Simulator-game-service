@@ -6,7 +6,6 @@ import org.alex323glo.its_simulator.exception.ValidationException;
 import org.alex323glo.its_simulator.model.User;
 import org.alex323glo.its_simulator.model.UserExtension;
 import org.alex323glo.its_simulator.model.UserGameProfile;
-import org.alex323glo.its_simulator.model.game.SpaceShip;
 import org.alex323glo.its_simulator.repository.UserExtensionRepository;
 import org.alex323glo.its_simulator.repository.UserGameProfileRepository;
 import org.alex323glo.its_simulator.repository.UserRepository;
